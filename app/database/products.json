@@ -1,0 +1,56 @@
+[
+    {
+        "title": "monitor",
+        "description": "240hz",
+        "price": 45000,
+        "thumbnail": "rutaImagen2",
+        "stock": 8,
+        "code": 23423,
+        "id": 1
+    },
+    {
+        "title": "celular",
+        "description": "s21",
+        "price": 1500,
+        "thumbnail": "rutaImagen",
+        "stock": 8,
+        "code": 2315,
+        "id": 2
+    },
+    {
+        "title": "notebook",
+        "description": "i9",
+        "price": 2250,
+        "thumbnail": "rutaImagen",
+        "stock": 10,
+        "code": 1250,
+        "id": 3
+    },
+    {
+        "title": "table",
+        "description": "4 legs",
+        "price": 1500,
+        "thumbnail": "rutaImagen",
+        "stock": 10,
+        "code": 4542,
+        "id": 4
+    },
+    {
+        "title": "car",
+        "description": "220 km/h",
+        "price": 35000,
+        "thumbnail": "rutaImagen",
+        "stock": 20,
+        "code": 4571,
+        "id": 5
+    },
+    {
+        "title": "mouse",
+        "description": "logitech",
+        "price": 3250,
+        "thumbnail": "rutaImagen",
+        "stock": 3,
+        "code": 1247,
+        "id": 6
+    }
+]
