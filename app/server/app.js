@@ -1,7 +1,9 @@
 // SETEAR SERVER
 const express = require('express');
-const ProductManager = require('..');
 const app = express();
+
+// IMPORTAR MODULO
+const ProductManager = require('..');
 
 //INICIALIZACION DE CLASE MASTER
 const productManager = new ProductManager("../database/products.json");
@@ -20,7 +22,7 @@ app.get("/products", async (req,res)=>{
         res.send(newListProducts);
     }
 });
-//Endpoint para filtrar producto dependiento el id pasado porametro
+// Endpoint para filtrar producto dependiento el id pasado porametro
 app.get("/products/:id", async (req,res) => {
     const {id=null} = req.params;
     if(!!id){
@@ -31,4 +33,4 @@ app.get("/products/:id", async (req,res) => {
 });
 
 //LEVANTAR SERVER
-app.listen(3000);
+app.listen(8080);
