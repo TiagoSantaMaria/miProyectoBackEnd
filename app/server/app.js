@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 // IMPORTAR MODULO PRODUCT ROUTER
 const { productsRouter } = require('../routers/productsRouter');
 // LLAMO AL PRODUCTS ROUTER
-app.use('/', productsRouter);
+app.use('/api/products', productsRouter);
 
 // LEVANTAR SERVER
 app.listen(8080);

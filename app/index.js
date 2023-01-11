@@ -1,41 +1,6 @@
 //IMPORTACION MODULO (MANEJO DE ARCHIVOS)
 const fs = require('fs');
 
-const product = [
-    {
-        title:"car",
-        description:"220 km/h",
-        price:35000,
-        thumbnail:"rutaImagen",
-        stock:20,
-        code:4571
-    },
-    {
-        title:"table",
-        description:"4 legs",
-        price:1500,
-        thumbnail:"rutaImagen",
-        stock:10,
-        code:4542
-    },
-    {
-        title:"notebook",
-        description:"i9",
-        price:2250,
-        thumbnail:"rutaImagen",
-        stock:10,
-        code:1250
-    },
-    {
-        title:"mouse",
-        description:"logitech",
-        price:3250,
-        thumbnail:"rutaImagen",
-        stock:3,
-        code:1247
-    }
-]
-
 class ProductManager{
     products;
     static idProducts;
@@ -59,8 +24,12 @@ class ProductManager{
                 let indexLastProduct = this.products.length - 1;
                 ProductManager.idProducts = this.products[indexLastProduct].id+1;
                 product.id = ProductManager.idProducts;
-                this.products.push(product);
-                fs.promises.writeFile(this.path, JSON.stringify(this.products));
+                if(product.hasOwnProperty('title') && product.hasOwnProperty('description') && product.hasOwnProperty('price') && product.hasOwnProperty('thumbnail') && product.hasOwnProperty('stock') && product.hasOwnProperty('code') && product.hasOwnProperty('status') && product.hasOwnProperty('category')){
+                    this.products.push(product);
+                    fs.promises.writeFile(this.path, JSON.stringify(this.products));
+                }else{
+                    console.log("El producto no pudo ser registrado ya que no estan todos los campos rellenos");
+                }
             }else{
                 console.log("PRODUCTO YA INCLUIDO");
             }

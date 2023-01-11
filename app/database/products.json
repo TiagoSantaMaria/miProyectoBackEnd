@@ -5,7 +5,9 @@
         "price": 45000,
         "thumbnail": "rutaImagen2",
         "stock": 8,
-        "code": 23423,
+        "code": "23423",
+        "status": true,
+        "category": "electronic",
         "id": 1
     },
     {
@@ -14,7 +16,9 @@
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 8,
-        "code": 2315,
+        "code": "2315",
+        "status": true,
+        "category": "electronic",
         "id": 2
     },
     {
@@ -23,16 +27,20 @@
         "price": 2250,
         "thumbnail": "rutaImagen",
         "stock": 10,
-        "code": 1250,
+        "code": "1250",
+        "status": true,
+        "category": "electronic",
         "id": 3
     },
     {
-        "title": "table",
-        "description": "4 legs",
+        "title": "tablet",
+        "description": "ultimate generation",
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 10,
-        "code": 4542,
+        "code": "4542",
+        "status": true,
+        "category": "electronic",
         "id": 4
     },
     {
@@ -41,7 +49,9 @@
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,
-        "code": 4571,
+        "code": "4571",
+        "status": true,
+        "category": "electronic",
         "id": 5
     },
     {
@@ -50,7 +60,20 @@
         "price": 3250,
         "thumbnail": "rutaImagen",
         "stock": 3,
-        "code": 1247,
+        "code": "1247",
+        "status": true,
+        "category": "electronic",
         "id": 6
+    },
+    {
+        "title": "motorcycle",
+        "description": "120 km/h",
+        "price": 35000,
+        "thumbnail": "rutaImagen",
+        "stock": 20,
+        "code": 421,
+        "status": true,
+        "category": "electronic",
+        "id": 7
     }
 ]
