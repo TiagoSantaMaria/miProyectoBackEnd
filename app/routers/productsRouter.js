@@ -35,16 +35,36 @@ productsRouter.get("/:id", async (req,res) => {
 });
 
 
-//Endpoint para agregar unproducto nuevo
+//Endpoint para agregar un producto nuevo
 productsRouter.post("/", (req,res) => {
     const newProduct = req.body;
     if(!!newProduct){
-        res.send(newProduct);
         productManager.addProduct(newProduct);
-        console.log("newProduct")
+        res.send("Producto Agregado!");
     }
 });
 
+//Endpoint para modificar un producto nuevo
+productsRouter.put("/:id",(req,res)=>{
+    const {id=null} = req.params;
+    if(!!id){
+        const updateProduct = req.body;
+        //El signo + sobre id es para transformarlo en number
+        productManager.updateProduct(+id, updateProduct);
+        res.send("Producto Actualizado!");
+    }
+});
+
+//Endpoint para eliminar un producto
+productsRouter.delete("/:id", (req,res)=>{
+    const {id=null} = req.params;
+    if(!!id){
+        productManager.deleteProduct(+id);
+        res.send("Producto Eliminado!")
+    }
+});
+
+//Exportar modulo
 module.exports = {
     productsRouter,
-  };
+    };

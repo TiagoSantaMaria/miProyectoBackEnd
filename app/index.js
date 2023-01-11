@@ -7,7 +7,7 @@ class ProductManager{
     constructor(path){
         this.path = path;
     }    
-
+    
     async loadFile(){
         try {
             this.products = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
@@ -24,7 +24,7 @@ class ProductManager{
                 let indexLastProduct = this.products.length - 1;
                 ProductManager.idProducts = this.products[indexLastProduct].id+1;
                 product.id = ProductManager.idProducts;
-                if(product.hasOwnProperty('title') && product.hasOwnProperty('description') && product.hasOwnProperty('price') && product.hasOwnProperty('thumbnail') && product.hasOwnProperty('stock') && product.hasOwnProperty('code') && product.hasOwnProperty('status') && product.hasOwnProperty('category')){
+                if(product.hasOwnProperty('title') && product.hasOwnProperty('description') && product.hasOwnProperty('price') && product.hasOwnProperty('thumbnail') && product.hasOwnProperty('stock') && product.hasOwnProperty('code') && product.hasOwnProperty('status') && product.hasOwnProperty('category') && product.title.length!=0 && product.description.length!=0 && product.price.length!=0 && product.thumbnail.length!=0 && product.stock.length!=0 && product.code.length!=0 && product.status.length!=0 && product.category.length!=0){
                     this.products.push(product);
                     fs.promises.writeFile(this.path, JSON.stringify(this.products));
                 }else{
@@ -63,18 +63,20 @@ class ProductManager{
         }
     }
 
-    async updateProduct(id,newTitle,newDescription,newPrice,newThumbnail,newCode,newStock){
+    async updateProduct(id,updateProduct){
         try{
             await this.loadFile();
             const product = this.products.find((product)=> product.id===id);
             if (!!product){
                 //ACTUALIZACION ATRIBUTOS DE OBJETO
-                if (!!newTitle) product.title = newTitle;
-                if (!!newDescription) product.description = newDescription;
-                if (!!newPrice) product.price = newPrice;
-                if (!!newThumbnail) product.thumbnail = newThumbnail;
-                if (!!newCode) product.code = newCode;
-                if (!!newStock || newStock === 0) product.stock = newStock;
+                if (!!updateProduct.title) product.title = updateProduct.title;
+                if (!!updateProduct.description) product.description = updateProduct.description;
+                if (!!updateProduct.price) product.price = updateProduct.price;
+                if (!!updateProduct.thumbnail) product.thumbnail = updateProduct.thumbnail;
+                if (!!updateProduct.stock || updateProduct.stock === 0) product.stock = updateProduct.stock;
+                if (!!updateProduct.code) product.code = updateProduct.code;
+                if (!!updateProduct.status) product.status = updateProduct.status;
+                if (!!updateProduct.category) product.category = updateProduct.category;
                 //ACTUALIZACION ARCHIVO
                 await fs.promises.writeFile(this.path, JSON.stringify(this.products));
                 console.log("SE ACTUALIZO");
