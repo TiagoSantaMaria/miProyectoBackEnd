@@ -3,14 +3,23 @@ const fs = require('fs');
 
 class ProductManager{
     products;
+    carts;
     static idProducts;
+    static idCarts;
     constructor(path){
         this.path = path;
     }    
-    
-    async loadFile(){
+
+    async loadFileProducts(){
         try {
             this.products = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
+        } catch (err) {
+            throw new Error(err);
+        }
+    }
+    async loadFileCarts(){
+        try {
+            this.carts = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
         } catch (err) {
             throw new Error(err);
         }
@@ -18,7 +27,7 @@ class ProductManager{
 
     async addProduct(product){
         try{
-            await this.loadFile();
+            await this.loadFileProducts();
             const productFind = await this.products.find(prod=>prod.code == product.code);
             if (!!!productFind){
                 let indexLastProduct = this.products.length - 1;
@@ -38,9 +47,25 @@ class ProductManager{
         }
     }
 
+    async addCart(cart){
+        try{
+            await this.loadFileCarts();
+            if(this.carts.length===0){
+                cart.id = 1;
+            }else{
+                let indexLastCart = this.carts.length - 1;
+                ProductManager.idCarts = this.carts[indexLastCart].id+1;
+                cart.id = ProductManager.idCarts;
+            }
+            this.carts.push(cart);
+            fs.promises.writeFile(this.path, JSON.stringify(this.carts));
+        }catch(err){
+            throw new Error(err);
+        }
+    }
     async getProduct(){
         try{
-            await this.loadFile();
+            await this.loadFileProducts();
             return this.products;
         }catch(err){
             throw new Error(err);
@@ -50,7 +75,7 @@ class ProductManager{
 
     async getProductById(id){
         try{
-            await this.loadFile();
+            await this.loadFileProducts();
             const productById = this.products.find(prod=>prod.id === id);
             if (productById === undefined){
                 console.log("Not found");
@@ -65,7 +90,7 @@ class ProductManager{
 
     async updateProduct(id,updateProduct){
         try{
-            await this.loadFile();
+            await this.loadFileProducts();
             const product = this.products.find((product)=> product.id===id);
             if (!!product){
                 //ACTUALIZACION ATRIBUTOS DE OBJETO
@@ -90,7 +115,7 @@ class ProductManager{
 
     async deleteProduct(id){
         try{
-            await this.loadFile();
+            await this.loadFileProducts();
             const product = this.products.find((product)=> product.id===id);
             if (!!product){
                 let index = this.products.indexOf(product);
@@ -103,7 +128,6 @@ class ProductManager{
             throw new Error(err);
         }
     }
-
 }
 
 // const test = new ProductManager("./database/products.json");
