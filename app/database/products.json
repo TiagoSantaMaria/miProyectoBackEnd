@@ -13,9 +13,9 @@
     {
         "title": "celular",
         "description": "s21",
-        "price": 7500,
+        "price": 1500,
         "thumbnail": "rutaImagen",
-        "stock": 80,
+        "stock": 8,
         "code": "2315",
         "status": true,
         "category": "electronic",

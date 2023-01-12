@@ -17,7 +17,7 @@ cartsRouter.post("/",(req,res)=>{
     const newCart = req.body;
     if(!!newCart){
         cartManager.addCart(newCart);
-        res.send(newCart)
+        res.status(200).send(newCart);
     }
 });
 
@@ -27,24 +27,30 @@ cartsRouter.post("/:cid/product/:pid", async(req,res)=>{
     if(!!id.cid && id.pid){
         const cart = await cartManager.getCartById(+id.cid);
         const product = await productManager.getProductById(+id.pid);
-        cartManager.addProductToCart(cart,product,1);
+        if(!cart || !product){
+            res.status(400).send("El Producto no pudo ser Agregado!")
+        }else{
+            cartManager.addProductToCart(cart,product,1);
+            res.status(200).send("Producto Agregado!")
+        }
     }
-    res.send("HOLA")
 })
 
 //Endpoint para mostrar los productos del carrito
-cartsRouter.get("/:id", async (req,res)=>{
+cartsRouter.get("/:id", async(req,res)=>{
     const {id} = req.params;
-    console.log(id);
     const cart = await cartManager.getCartById(+id);
-    console.log(cart)
-    const productCart = [];
-    for(let i=0; i<cart.products.length;i++){
-        let product = await productManager.getProductById(cart.products[i].idProduct);
-        productCart.push(product)
+    if(!cart){
+        res.status(400).send("Id Carrito no Encontrado");
+    }else{
+        const productCart = [];
+        for(let i=0; i<cart.products.length;i++){
+            let product = await productManager.getProductById(cart.products[i].idProduct);
+            product.quantity = cart.products[i].quantity;
+            productCart.push(product)
+        }
+        res.status(200).send(productCart);
     }
-    console.log(productCart);
-    res.send(productCart)
 })
 
 //Exportar modulo

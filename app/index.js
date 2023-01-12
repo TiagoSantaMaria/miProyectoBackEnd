@@ -28,11 +28,13 @@ class ProductManager{
                 if(product.hasOwnProperty('title') && product.hasOwnProperty('description') && product.hasOwnProperty('price') && product.hasOwnProperty('thumbnail') && product.hasOwnProperty('stock') && product.hasOwnProperty('code') && product.hasOwnProperty('status') && product.hasOwnProperty('category') && product.title.length!=0 && product.description.length!=0 && product.price.length!=0 && product.thumbnail.length!=0 && product.stock.length!=0 && product.code.length!=0 && product.status.length!=0 && product.category.length!=0){
                     this.products.push(product);
                     fs.promises.writeFile(this.path, JSON.stringify(this.products));
+                    return true;
                 }else{
-                    console.log("El producto no pudo ser registrado ya que no estan todos los campos rellenos");
+                    //EL PROD NO SE AGG XQ HAY DATOS NO RELLENOS
+                    return false;
                 }
             }else{
-                console.log("PRODUCTO YA INCLUIDO");
+                return false;
             }
         }catch(err){
             throw new Error(err);
@@ -79,9 +81,9 @@ class ProductManager{
                 if (!!updateProduct.category) product.category = updateProduct.category;
                 //ACTUALIZACION ARCHIVO
                 await fs.promises.writeFile(this.path, JSON.stringify(this.products));
-                console.log("SE ACTUALIZO");
+                return true;
             }else{
-                console.log(`Product with id:${id} not found`);
+                return false
             }
             }catch(err){
                 throw new Error(err);
@@ -96,8 +98,9 @@ class ProductManager{
                 let index = this.products.indexOf(product);
                 this.products.splice(index,1);
                 await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+                return true;
             }else{
-                console.log(`Product with id:${id} not found`);
+                return false;
             }
         }catch(err){
             throw new Error(err);
