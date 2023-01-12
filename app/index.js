@@ -3,27 +3,19 @@ const fs = require('fs');
 
 class ProductManager{
     products;
-    carts;
     static idProducts;
-    static idCarts;
     constructor(path){
-        this.path = path;
+        this.path=path;
     }    
 
     async loadFileProducts(){
         try {
-            this.products = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
+            this.products = JSON.parse(await fs.promises.readFile("../database/products.json", "utf-8"));
         } catch (err) {
             throw new Error(err);
         }
     }
-    async loadFileCarts(){
-        try {
-            this.carts = JSON.parse(await fs.promises.readFile(this.path, "utf-8"));
-        } catch (err) {
-            throw new Error(err);
-        }
-    }
+    
 
     async addProduct(product){
         try{
@@ -47,22 +39,6 @@ class ProductManager{
         }
     }
 
-    async addCart(cart){
-        try{
-            await this.loadFileCarts();
-            if(this.carts.length===0){
-                cart.id = 1;
-            }else{
-                let indexLastCart = this.carts.length - 1;
-                ProductManager.idCarts = this.carts[indexLastCart].id+1;
-                cart.id = ProductManager.idCarts;
-            }
-            this.carts.push(cart);
-            fs.promises.writeFile(this.path, JSON.stringify(this.carts));
-        }catch(err){
-            throw new Error(err);
-        }
-    }
     async getProduct(){
         try{
             await this.loadFileProducts();
@@ -80,7 +56,6 @@ class ProductManager{
             if (productById === undefined){
                 console.log("Not found");
             }else{
-                console.log(productById);
                 return productById
             }
         }catch(err){
@@ -129,6 +104,82 @@ class ProductManager{
         }
     }
 }
+class CartManager{
+    carts;
+    static idCarts;
+    constructor(path){
+        this.path=path;
+    }
+
+    async loadFileCarts(){
+        try {
+            this.carts = JSON.parse(await fs.promises.readFile("../database/carts.json", "utf-8"));
+        } catch (err) {
+            throw new Error(err);
+        }
+    }
+
+    async addCart(cart){
+        try{
+            await this.loadFileCarts();
+            if(this.carts.length===0){
+                cart.id = 1;
+            }else{
+                let indexLastCart = this.carts.length - 1;
+                ProductManager.idCarts = this.carts[indexLastCart].id+1;
+                cart.id = ProductManager.idCarts;
+            }
+            this.carts.push(cart);
+            fs.promises.writeFile(this.path, JSON.stringify(this.carts));
+        }catch(err){
+            throw new Error(err);
+        }
+    }
+
+    async getCartById(id){
+        try{
+            await this.loadFileCarts();
+            const cartById = this.carts.find(cart=>cart.id === id);
+            if (cartById === undefined){
+                console.log("Not found");
+            }else{
+                return cartById
+            }
+        }catch(err){
+            throw new Error(err)
+        }
+    }
+
+    async addProductToCart(cart,product,quantity){
+        try {
+            let locate = false;
+            for(let i=0; i<cart.products.length; i++){
+                if(cart.products[i].idProduct===product.id){
+                    cart.products[i].quantity++;
+                    locate = true;
+                    break;
+                }
+            };
+            if(!locate){
+                const orderProduct={};
+                orderProduct.idProduct=product.id;
+                orderProduct.quantity=quantity;
+                cart.products.push(orderProduct);
+            }
+            this.updateCart(cart);
+        }catch(err) {
+            throw new Error(err)
+        }
+    }
+    async updateCart(cart){
+        try {
+            this.carts[this.carts.indexOf(cart)] = cart;
+            await fs.promises.writeFile(this.path, JSON.stringify(this.carts));
+        } catch (error) {
+            
+        }
+    }
+} 
 
 // const test = new ProductManager("./database/products.json");
 // test.addProduct(product[2]);
@@ -137,4 +188,7 @@ class ProductManager{
 // test.updateProduct(1,null,"240hz",45000,"rutaImagen2",23423,8);
 // test.deleteProduct(5);
 
-module.exports = ProductManager;
+module.exports = {
+    ProductManager,
+    CartManager
+    };

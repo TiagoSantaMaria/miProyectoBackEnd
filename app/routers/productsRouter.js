@@ -5,7 +5,7 @@ const express = require("express");
 const productsRouter = express.Router();
 
 //INICIALIZACION DE CLASE MASTER
-const ProductManager = require("..");
+const {ProductManager} = require("..");
 const productManager = new ProductManager("../database/products.json");
 
 //ENDPOINTS
