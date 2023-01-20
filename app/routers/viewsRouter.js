@@ -9,13 +9,14 @@ const {ProductManager} = require("..");
 const productManager = new ProductManager("../database/products.json");
 
 //ENDPOINTS
-viewsRouter.get('/', async(req,res)=>{
+viewsRouter.get('/products', async(req,res)=>{
     const products = await productManager.getProduct();
     res.render('home', {products, stylesheet: 'viewProducts'});
 })
 
-viewsRouter.get('/realtimeproducts',()=>{
-
+viewsRouter.get('/realtimeproducts', async(req,res)=>{
+    const products = await productManager.getProduct();
+    res.render('realTimeProducts', {products, stylesheet: 'viewProducts'});
 });
 
 //Exportar modulo

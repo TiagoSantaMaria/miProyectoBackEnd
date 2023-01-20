@@ -27,7 +27,7 @@ const { cartsRouter } = require('../routers/cartsRouter');
 const { viewsRouter } = require('../routers/viewsRouter');
 
 // LLAMO AL VIEWS ROUTER
-app.use('/products', viewsRouter);
+app.use('/', viewsRouter);
 
 // LLAMO AL PRODUCTS ROUTER
 app.use('/api/products', productsRouter);
@@ -36,4 +36,15 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
 // LEVANTAR SERVER
-const httpServer = app.listen(8080);
+const socketServer = new Server(app.listen(8080));
+
+socketServer.on('connection', (socket)=>{
+    console.log("Nuevo Cliente Conectado");
+    socket.on('mensaje',(msj)=>{
+        console.log(`Recibi un mensaje: ${msj}`);
+        socket.emit('singlecast','mensaje singlecast');
+        socket.broadcast.emit('broadcast','mensaje broadcast');
+        socketServer.emit('multicast','mensaje multicast');
+    })
+})
+
