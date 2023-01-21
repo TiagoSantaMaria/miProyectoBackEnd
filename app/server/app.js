@@ -54,8 +54,6 @@ socketServer.on('connection', (socket) =>{
     console.log("Cliente Conectado");
 })
 
-
-
 //EJEMPLOS DE UTILIZACION DE SOCKET
     // socket.on('mensaje',(msj)=>{
     //     console.log(`Recibi un mensaje: ${msj}`);

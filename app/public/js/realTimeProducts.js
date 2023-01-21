@@ -1,8 +1,8 @@
 const socket = io();
 console.log("HOLA");
 socket.on("newProduct", (newProduct)=>{
-    const addProduct = document.getElementById("newProduct");
-    addProduct.innerHTML = `
+    const newElement = document.createElement("div");
+    newElement.innerHTML = `
         <div>
             <hr>
                 <li>Nombre Producto: ${newProduct.title}</li>
@@ -11,9 +11,8 @@ socket.on("newProduct", (newProduct)=>{
             </hr>
         </div>
     `
-})
-
-
+    document.getElementById("listProducts").appendChild(newElement);
+});
 
 
 //EJEMPLOS DE UTILIZACION DE SOCKET
