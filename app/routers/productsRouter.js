@@ -44,6 +44,8 @@ productsRouter.post("/", async (req,res) => {
         }else{
             res.status(400).send("El Producto No Pudo Ser Agregado!");
         }
+    }else{
+        res.status(400).send("Por Favor ingrese un Producto");
     }
 });
 
