@@ -39,6 +39,7 @@ productsRouter.post("/", async (req,res) => {
     const newProduct = req.body;
     if(!!newProduct){
         if(await productManager.addProduct(newProduct)){
+            req.socket.emit("newProduct", newProduct);
             res.status(200).send("Producto Agregado!");
         }else{
             res.status(400).send("El Producto No Pudo Ser Agregado!");
