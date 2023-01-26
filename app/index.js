@@ -10,7 +10,7 @@ class ProductManager{
 
     async loadFileProducts(){
         try {
-            this.products = JSON.parse(await fs.promises.readFile("../database/products.json", "utf-8"));
+            this.products = JSON.parse(await fs.promises.readFile("./database/products.json", "utf-8"));
         } catch (err) {
             throw new Error(err);
         }
@@ -116,7 +116,7 @@ class CartManager{
 
     async loadFileCarts(){
         try {
-            this.carts = JSON.parse(await fs.promises.readFile("../database/carts.json", "utf-8"));
+            this.carts = JSON.parse(await fs.promises.readFile("./database/carts.json", "utf-8"));
         } catch (err) {
             throw new Error(err);
         }
