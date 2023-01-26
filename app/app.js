@@ -1,13 +1,13 @@
 //IMPORTS
 
 // IMPORTAR MODULO PRODUCT ROUTERimage.png
-const { productsRouter } = require('../routers/productsRouter');
+const { productsRouter } = require('./routers/productsRouter');
 // IMPORTAR MODULO CART ROUTERimage.png
-const { cartsRouter } = require('../routers/cartsRouter');
+const { cartsRouter } = require('./routers/cartsRouter');
 // IMPORTAR MODULO VIEWS ROUTER
-const { viewsRouter } = require('../routers/viewsRouter');
+const { viewsRouter } = require('./routers/viewsRouter');
 //IMPORTO MIDDLEWARE
-const { injectSocketMiddleWare } = require('../routers/middlewares');
+const { injectSocketMiddleWare } = require('./routers/middlewares');
 
 //CONTS/VARS
 
@@ -18,16 +18,16 @@ const app = express();
 const {Server} = require('socket.io');
 // LEVANTAR SERVER
 const socketServer = new Server(app.listen(8080));
-// SETEAR HANDLEBARS
+// SETEAR HANDLEBARSz
 const handlebars = require("express-handlebars");
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
-app.set("views", "../views");
+app.set("views", "./views");
 
 //CONFIGURACIONES SERVER
 
 // DECLARO ESTATICA LA CARPETA PUBLIC
-app.use(express.static("../public"));
+app.use(express.static("./public"));
 // LINEAS DE CODIGO PARA EL MANEJO DE INFORMACION (VAN SIEMPRE)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
