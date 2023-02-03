@@ -1,5 +1,5 @@
 const socket = io();
-console.log("HOLA");
+
 socket.on("newProduct", (newProduct)=>{
     const newElement = document.createElement("div");
     newElement.innerHTML = `
