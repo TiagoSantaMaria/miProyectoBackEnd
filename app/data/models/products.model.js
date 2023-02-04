@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+
 const productCollection = "products";
 
-const userSchema = new mongoose.Schema({
+const productSchema  = new mongoose.Schema({
     title:String,
     despcription:String,
     code:String,
@@ -12,7 +13,7 @@ const userSchema = new mongoose.Schema({
     status:Boolean,
 });
 
-const productModel = mongoose.model(productCollection,userSchema);
+const productModel = mongoose.model(productCollection, productSchema);
 
 module.exports = {
     productModel
