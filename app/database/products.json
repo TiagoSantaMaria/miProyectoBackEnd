@@ -1,7 +1,7 @@
 [
     {
         "title": "monitor",
-        "description": "240hz",
+        "info": "240hz",
         "price": 45000,
         "thumbnail": "rutaImagen2",
         "stock": 8,
@@ -12,7 +12,7 @@
     },
     {
         "title": "celular",
-        "description": "s21",
+        "info": "s21",
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 8,
@@ -23,7 +23,7 @@
     },
     {
         "title": "notebook",
-        "description": "i9",
+        "info": "i9",
         "price": 2250,
         "thumbnail": "rutaImagen",
         "stock": 10,
@@ -34,7 +34,7 @@
     },
     {
         "title": "tablet",
-        "description": "ultimate generation",
+        "info": "ultimate generation",
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 10,
@@ -45,7 +45,7 @@
     },
     {
         "title": "car",
-        "description": "220 km/h",
+        "info": "220 km/h",
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,
@@ -56,7 +56,7 @@
     },
     {
         "title": "mouse",
-        "description": "logitech",
+        "info": "logitech",
         "price": 3250,
         "thumbnail": "rutaImagen",
         "stock": 3,
@@ -67,7 +67,7 @@
     },
     {
         "title": "motorcycle",
-        "description": "120 km/h",
+        "info": "120 km/h",
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,
@@ -78,7 +78,7 @@
     },
     {
         "title": "Iphone",
-        "description": "14 ProMax",
+        "info": "14 ProMax",
         "price": 95000,
         "thumbnail": "rutaImagen",
         "stock": 10,
@@ -89,7 +89,7 @@
     },
     {
         "title": "Tiago",
-        "description": "120 km/h",
+        "info": "120 km/h",
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,
@@ -100,7 +100,7 @@
     },
     {
         "title": "Juan",
-        "description": "120 km/h",
+        "info": "120 km/h",
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,
@@ -111,7 +111,7 @@
     },
     {
         "title": "Ramiro",
-        "description": "120 km/h",
+        "info": "120 km/h",
         "price": 35000,
         "thumbnail": "rutaImagen",
         "stock": 20,

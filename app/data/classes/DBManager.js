@@ -4,6 +4,7 @@ const {cartModel} = require("../models/carts.model");
 const {productModel} = require("../models/products.model");
 
 class ProductManagerDB{
+
     async read(limit=null){
         try{
             if(!limit){
@@ -25,12 +26,17 @@ class ProductManagerDB{
             throw err;
         }
     }
-
-    async create(product) {
+    async create(product, code) {
         try {
-            const newProduct = new productModel(product);
-            await newProduct.save();
-            return newProduct;
+            console.log(code);
+            const productFind = await productModel.find({code:`${code}`})
+            if(!productFind.length){
+                const newProduct = new productModel(product);
+                await newProduct.save();
+                return true;
+            }else{
+                return false
+            }
         } catch (err) {
             throw err;
         }
@@ -43,7 +49,7 @@ class ProductManagerDB{
             throw err;
         }
     }
-    async update(productId, product) {
+    async updateProduct(productId, product) {
         try {
             const result = await productModel.findByIdAndUpdate(productId, product);
             return result;

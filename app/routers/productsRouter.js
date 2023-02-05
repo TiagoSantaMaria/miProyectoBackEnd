@@ -11,7 +11,7 @@ const productManager = new ProductManagerDB;
 
 //ENDPOINTS
 
-//Endpoint para filtrar productos dependiendo el limite q se quiera mostrar 
+// Endpoint para filtrar productos dependiendo el limite q se quiera mostrar 
 productsRouter.get("/", async (req, res) => {
     try {
         const {limit = null} = req.query;
@@ -25,15 +25,15 @@ productsRouter.get("/", async (req, res) => {
     } catch (err) {
         res.status(500).send(err.message);
     }
-    });
+});
 
-// //Endpoint para filtrar producto dependiento el id pasado porametro
-productsRouter.get("/:id", async (req,res) => {
+// Endpoint para filtrar producto dependiento el id pasado porametro
+productsRouter.get("/:pid", async (req,res) => {
     try{
-        const {id=null} = req.params;
-        if(!!id){
-            const productsById = await productManager.readOneByID(id);
-            if(!productsById)res.status(400).send(`El producto con id:${id} no se encuentra registrado`);
+        const {pid=null} = req.params;
+        if(!!pid){
+            const productsById = await productManager.readOneByID(pid);
+            if(!productsById)res.status(400).send(`El producto con id:${pid} no se encuentra registrado`);
             if(!!productsById)res.status(200).send(productsById);
         }   
     }catch(err){
@@ -41,27 +41,48 @@ productsRouter.get("/:id", async (req,res) => {
     }
 });
 
-// //Endpoint para agregar un producto nuevo
+// Endpoint para agregar un producto nuevo
 productsRouter.post("/", async (req, res) => {
-        const {title, description, code, price, thumbnail, stock, category,  status} = req.body;
-        if (!title || !description || !code || !price || !thumbnail || !stock || !category || !status){
+        const {title, info, code, price, thumbnail, stock, category,  status} = req.body;
+        if (!title || !info || !code || !price || !thumbnail || !stock || !category || !status){
             res.status(400).send({ error: "Faltan datos" });
             return;
         }
         try {
-            const response = await productManager.create({title, description, code, price, thumbnail, stock, category, status});
-            res.status(200).send({ message: "Producto creado", response });
+            const product = {title, info, code, price, thumbnail, stock, category,  status};
+            if(await productManager.create(product, code)){
+                res.status(200).send({ message: "Producto creado", product});
+            }else{
+                res.status(400).send({ error: "El Codigo del producto esta en uso vigente!" });
+            }
         } catch (err) {
             res.status(500).send(err.message);
         }
 });
 
-
-
-
-
-
-
+// Endpoint para modificar un producto nuevo
+productsRouter.put("/:pid", async(req,res)=>{
+    const {pid=null} = req.params;
+    if(!!pid){
+        const updateProduct = req.body;
+        //El signo + sobre id es para transformarlo en number
+        if(await productManager.updateProduct(pid, updateProduct)){
+            res.status(200).send("Producto Actualizado!");
+        }else{
+            res.status(400).send("El Producto No Pudo Ser Actualizado!");
+        }
+    }
+});
+// Endpoint para eliminar un producto
+productsRouter.delete("/:pid", async (req, res) => {
+    const { pid } = req.params;
+    try {
+        const result = await productManager.delete(pid);
+        res.status(200).send({ message: "Producto eliminado", result });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 //Exportar modulo
 module.exports = {
@@ -144,6 +165,5 @@ module.exports = {
 //         }else{
 //             res.status(400).send("El Producto No Pudo Ser Eliminado!")
 //         }
-        
 //     }
 // });
