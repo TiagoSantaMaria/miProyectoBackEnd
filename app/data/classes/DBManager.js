@@ -4,7 +4,6 @@ const {cartModel} = require("../models/carts.model");
 const {productModel} = require("../models/products.model");
 
 class ProductManagerDB{
-
     async read(limit=null){
         try{
             if(!limit){
@@ -59,6 +58,58 @@ class ProductManagerDB{
     }      
 }
 
+class CartManagerDB{
+
+async create() {
+    try {
+        const newCart = new cartModel();
+        await newCart.save();
+        return newCart;
+    } catch (err) {
+        throw err;
+    }
+}
+async read() {
+    try {
+        const carts = await cartModel.find();
+        return carts;
+    } catch (err) {
+        throw err;
+    }
+}
+async readOneByID(id) {
+    try{
+        const cart = await cartModel.findById(id);
+        return cart;
+    }catch(err){
+        throw err;
+    }
+}
+async addProductToCart(cart,product,quantity){
+    try{
+        let locate = false;
+        for(let i=0; i<cart.products.length; i++){
+            if(cart.products[i].codeProduct===product.code){
+                cart.products[i].quantity++;
+                locate = true;
+                break;
+            }
+        };
+        if(!locate){
+            const orderProduct = {};
+            orderProduct.idProduct = product._id;
+            orderProduct.codeProduct = product.code;
+            orderProduct.quantity = quantity;
+            cart.products.push(orderProduct);
+        }
+        await cartModel.findByIdAndUpdate(cart._id,cart);
+    }catch(err){
+        throw err
+    }
+}
+}
+
 module.exports = {
-    ProductManagerDB
+    ProductManagerDB,
+    CartManagerDB
     };
