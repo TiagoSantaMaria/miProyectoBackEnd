@@ -7,7 +7,7 @@ class ProductManagerDB{
     async read(limit=null){
         try{
             if(!limit){
-                const products = await productModel.find();
+                const products = await productModel.find().lean();
                 return products;
             }else{
                 const products = await productModel.find().limit(limit);
@@ -71,7 +71,7 @@ async create() {
 }
 async read() {
     try {
-        const carts = await cartModel.find();
+        const carts = await cartModel.find().lean();
         return carts;
     } catch (err) {
         throw err;
@@ -107,6 +107,7 @@ async addProductToCart(cart,product,quantity){
         throw err
     }
 }
+
 }
 
 module.exports = {

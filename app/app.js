@@ -2,6 +2,9 @@
 const mongoose = require("mongoose");
 // const { userModel } = require("./models/users.model");
 
+
+
+
 // IMPORTAR MODULO PRODUCT ROUTERimage.png
 const { productsRouter } = require('./routers/productsRouter');
 // IMPORTAR MODULO CART ROUTERimage.png
@@ -34,6 +37,7 @@ const handlebars = require("express-handlebars");
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+
 
 //CONFIGURACIONES SERVER
 

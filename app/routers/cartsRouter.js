@@ -37,15 +37,36 @@ cartsRouter.post("/:cid/product/:pid", async(req,res)=>{
     }
 })
 
+ //Endpoint para mostrar los productos del carrito ingresado
+cartsRouter.get("/:cid", async(req,res)=>{
+    const {cid} = req.params;
+    const cart = await cartManager.readOneByID(cid);
+    if(!cart){
+        res.status(400).send("Id Carrito no Encontrado");
+    }else{
+        const productCart = [{message:"PRODUCTOS DEL CARRITO"}];
+        for(let i=0; i<cart.products.length;i++){
+            let product = await productManager.readOneByID(cart.products[i].idProduct);
+            const productInCart={};
+            productInCart.title=product.title;
+            productInCart.code=product.code
+            productInCart.quantity=cart.products[i].quantity;
+            productInCart.price=product.price;
+            productCart.push(productInCart);
+        }
+        res.status(200).send(productCart);
+    }
+})
 
-
-
-
-
-
-
-
-
+//Endpointpara mostror los carritos
+cartsRouter.get("/",async(req,res)=>{
+    try{
+        const carts = await cartManager.read();
+        res.status(200).send(carts);
+    }catch(err){
+        throw err;
+    }
+})
 
 //Exportar modulo
 module.exports = {

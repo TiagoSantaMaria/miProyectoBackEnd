@@ -5,17 +5,18 @@ const express = require("express");
 const viewsRouter = express.Router();
 
 //INICIALIZACION DE CLASE MASTER
-const {ProductManager} = require("..");
-const productManager = new ProductManager("../database/products.json");
+const { ProductManagerDB } = require("../data/classes/DBManager");
+const productManager = new ProductManagerDB;
 
+ProductManagerDB
 //ENDPOINTS
 viewsRouter.get('/products', async(req,res)=>{
-    const products = await productManager.getProduct();
+    const products = await productManager.read();
     res.render('home', {products, stylesheet: 'viewProducts'});
 })
 
 viewsRouter.get('/realtimeproducts', async(req,res)=>{
-    const products = await productManager.getProduct();
+    const products = await productManager.read();
     res.render('realTimeProducts', {products, stylesheet: 'viewProducts'});
 });
 

@@ -51,6 +51,7 @@ productsRouter.post("/", async (req, res) => {
         try {
             const product = {title, info, code, price, thumbnail, stock, category,  status};
             if(await productManager.create(product, code)){
+                req.socket.emit("newProduct", product);
                 res.status(200).send({ message: "Producto creado", product});
             }else{
                 res.status(400).send({ error: "El Codigo del producto esta en uso vigente!" });
