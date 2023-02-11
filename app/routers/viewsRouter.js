@@ -12,6 +12,7 @@ ProductManagerDB
 //ENDPOINTS
 viewsRouter.get('/products', async(req,res)=>{
     const products = await productManager.read();
+    
     res.render('home', {products, stylesheet: 'viewProducts'});
 })
 

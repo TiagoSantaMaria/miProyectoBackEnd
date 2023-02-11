@@ -17,6 +17,31 @@ class ProductManagerDB{
             throw err;
         }
     }
+    async paginate(query,page,limit,sort){
+        try{
+            const response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
+            const responseServer = {}
+            responseServer.status="Succes"
+            responseServer.payload= response.docs;
+            responseServer.totalPages=response.totalPages;
+            responseServer.prevPage=response.prevPage;
+            responseServer.nextPage=response.nextPage;
+            responseServer.page=response.page;
+            responseServer.hasPrevPage=response.hasPrevPage;
+            responseServer.hasNextPage=response.hasNextPage;
+            responseServer.prevLink=response.prevLink;
+            if(responseServer.hasNextPage){
+                responseServer.nextLink=`http://localhost:8080/api/products?category=electronic&page=${+page+1}&limit=1&sort=1`;
+            }else{responseServer.nextLink=null}
+            if(responseServer.hasPrevPage){
+                responseServer.prevLink=`http://localhost:8080/api/products?category=electronic&page=${+page-1}&limit=1&sort=1`;
+            }else{responseServer.prevLink=null}
+            return(responseServer);
+        }catch(err){
+            throw err;
+        }
+    }
+    
     async readOneByID(id){
         try{
             const product = await productModel.findById(id);
@@ -69,6 +94,7 @@ async create() {
         throw err;
     }
 }
+
 async read() {
     try {
         const carts = await cartModel.find().lean();

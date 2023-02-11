@@ -14,18 +14,32 @@ const productManager = new ProductManagerDB;
 // Endpoint para filtrar productos dependiendo el limite q se quiera mostrar 
 productsRouter.get("/", async (req, res) => {
     try {
-        const {limit = null} = req.query;
-        if (!limit){
-            const product = await productManager.read();
-            res.send({ productos: product });
-        }else{
-            const product = await productManager.read(limit);
-            res.send({ productos: product });
-        }
+        const {category = null} = req.query;
+        const {page = 1} = req.query;
+        const {limit = 10} = req.query;
+        const {sort = null} = req.query;
+        const response = await productManager.paginate(category,page,limit, sort);
+        res.send(response)
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
+// Endpoint para filtrar productos dependiendo el limite q se quiera mostrar 
+// productsRouter.get("/", async (req, res) => {
+//     try {
+//         const {limit = null} = req.query;
+//         if (!limit){
+//             const product = await productManager.read();
+//             res.send({ productos: product });
+//         }else{
+//             const product = await productManager.read(limit);
+//             res.send({ productos: product });
+//         }
+//     } catch (err) {
+//         res.status(500).send(err.message);
+//     }
+// });
 
 // Endpoint para filtrar producto dependiento el id pasado porametro
 productsRouter.get("/:pid", async (req,res) => {
