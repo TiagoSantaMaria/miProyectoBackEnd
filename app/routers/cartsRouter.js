@@ -68,6 +68,11 @@ cartsRouter.get("/",async(req,res)=>{
     }
 })
 
+//Endpoint para eliminar producto del Carrito
+cartsRouter.delete("/:cid/products/:pid",async(req,res)=>{
+    
+})
+
 //Exportar modulo
 module.exports = {
     cartsRouter,

@@ -19,29 +19,27 @@ class ProductManagerDB{
     }
     async paginate(query,page,limit,sort){
         try{
-            const response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
-            const responseServer = {}
-            responseServer.status="Succes"
-            responseServer.payload= response.docs;
-            responseServer.totalPages=response.totalPages;
-            responseServer.prevPage=response.prevPage;
-            responseServer.nextPage=response.nextPage;
-            responseServer.page=response.page;
-            responseServer.hasPrevPage=response.hasPrevPage;
-            responseServer.hasNextPage=response.hasNextPage;
-            responseServer.prevLink=response.prevLink;
+            let response ={};
+            if(!sort){
+                response = await productModel.paginate({category:`${query}`},{page:`${page}`, limit:`${limit}`});
+            }else{
+                response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
+            }
+            const responseServer = {...response}
+            responseServer.status="Succes";
             if(responseServer.hasNextPage){
-                responseServer.nextLink=`http://localhost:8080/api/products?category=electronic&page=${+page+1}&limit=1&sort=1`;
+                responseServer.nextLink=`http://localhost:8080/api/products?category=${query}&page=${+page+1}&limit=${limit}&sort=1`;
+                console.log(responseServer.nextLink);
             }else{responseServer.nextLink=null}
             if(responseServer.hasPrevPage){
-                responseServer.prevLink=`http://localhost:8080/api/products?category=electronic&page=${+page-1}&limit=1&sort=1`;
+                responseServer.prevLink=`http://localhost:8080/api/products?category=${query}&page=${+page-1}&limit=${limit}&sort=1`;
             }else{responseServer.prevLink=null}
+            console.log(responseServer)
             return(responseServer);
         }catch(err){
             throw err;
         }
     }
-    
     async readOneByID(id){
         try{
             const product = await productModel.findById(id);
@@ -84,7 +82,6 @@ class ProductManagerDB{
 }
 
 class CartManagerDB{
-
 async create() {
     try {
         const newCart = new cartModel();
@@ -94,7 +91,6 @@ async create() {
         throw err;
     }
 }
-
 async read() {
     try {
         const carts = await cartModel.find().lean();
@@ -122,18 +118,20 @@ async addProductToCart(cart,product,quantity){
             }
         };
         if(!locate){
-            const orderProduct = {};
-            orderProduct.idProduct = product._id;
-            orderProduct.codeProduct = product.code;
-            orderProduct.quantity = quantity;
-            cart.products.push(orderProduct);
+            // const orderProduct = {...product};
+            // orderProduct.idProduct = product._id;
+            // orderProduct.codeProduct = product.code;
+            // orderProduct.quantity = quantity;
+            cart.products.push({product:`${product._id}`});
         }
-        await cartModel.findByIdAndUpdate(cart._id,cart);
+        //ACTUALIZA EL CARRITO CON EL NUEVO PRODUCTO
+        // await cartModel.findByIdAndUpdate(cart._id,cart);
+        let cartWant = await cartModel.findOne({_id:`${cart._id}`})
+        console.log(JSON.stringify(cartWant,null,'\t'));
     }catch(err){
         throw err
     }
 }
-
 }
 
 module.exports = {
