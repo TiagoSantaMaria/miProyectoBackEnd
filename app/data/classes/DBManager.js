@@ -113,6 +113,7 @@ async readOneByID(id) {
         throw err;
     }
 }
+//leer anotaciones, ya que tengo un inconveniente con el manejo de la cantidad
 async addProductToCart(cart,product,quantity){
     try{
         //CON ESTO VALIDABA QUE NO SE CARGUE MUCHAS VECES UN MISMO PRODUCTO, SINO QUE AUMENTEEL ATRIBUTO QUANTITY PERO CON MONGOOSE Y EL POPULATE NO SE HACERLO
@@ -137,6 +138,15 @@ async addProductToCart(cart,product,quantity){
         //MUESTRA QUE EL POPULATE ANDA BIEN
         // let cartWant = await cartModel.findOne({_id:`${cart._id}`})
         // console.log(JSON.stringify(cartWant,null,'\t'));
+    }catch(err){
+        throw err
+    }
+}
+async deleteTotalProduct(cart,product){
+    try{
+        const newProducts = cart.products.filter((prod)=>prod.product.code !== product.code);
+        cart.products = newProducts;
+        await cartModel.findByIdAndUpdate(cart._id,cart);
     }catch(err){
         throw err
     }
