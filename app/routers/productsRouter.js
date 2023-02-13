@@ -14,7 +14,7 @@ const productManager = new ProductManagerDB;
 // Endpoint para filtrar productos dependiendo el limite q se quiera mostrar 
 productsRouter.get("/", async (req, res) => {
     try {
-        const {category = "category"} = req.query;
+        const {category = null} = req.query;
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;

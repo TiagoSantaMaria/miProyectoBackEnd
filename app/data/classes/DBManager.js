@@ -20,22 +20,29 @@ class ProductManagerDB{
     async paginate(query,page,limit,sort){
         try{
             let response ={};
-            if(!sort){
-                response = await productModel.paginate({category:`${query}`},{page:`${page}`, limit:`${limit}`});
+            if (query!=null){
+                if(!sort){
+                    response = await productModel.paginate({category:`${query}`},{page:`${page}`, limit:`${limit}`});
+                }else{
+                    response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
+                }
             }else{
-                response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
+                if(!sort){
+                    response = await productModel.paginate({},{page:`${page}`, limit:`${limit}`});
+                }else{
+                    response = await productModel.paginate({},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`});
+                }
             }
             const responseServer = {...response}
             responseServer.status="Succes";
             if(responseServer.hasNextPage){
                 responseServer.nextLink=`http://localhost:8080/api/products?category=${query}&page=${+page+1}&limit=${limit}&sort=1`;
-                console.log(responseServer.nextLink);
             }else{responseServer.nextLink=null}
             if(responseServer.hasPrevPage){
                 responseServer.prevLink=`http://localhost:8080/api/products?category=${query}&page=${+page-1}&limit=${limit}&sort=1`;
             }else{responseServer.prevLink=null}
-            console.log(responseServer)
             return(responseServer);
+            
         }catch(err){
             throw err;
         }
@@ -50,7 +57,6 @@ class ProductManagerDB{
     }
     async create(product, code) {
         try {
-            console.log(code);
             const productFind = await productModel.find({code:`${code}`})
             if(!productFind.length){
                 const newProduct = new productModel(product);
@@ -109,25 +115,28 @@ async readOneByID(id) {
 }
 async addProductToCart(cart,product,quantity){
     try{
-        let locate = false;
-        for(let i=0; i<cart.products.length; i++){
-            if(cart.products[i].codeProduct===product.code){
-                cart.products[i].quantity++;
-                locate = true;
-                break;
-            }
-        };
-        if(!locate){
+        //CON ESTO VALIDABA QUE NO SE CARGUE MUCHAS VECES UN MISMO PRODUCTO, SINO QUE AUMENTEEL ATRIBUTO QUANTITY PERO CON MONGOOSE Y EL POPULATE NO SE HACERLO
+        // let locate = false;
+        // for(let i=0; i<cart.products.length; i++){
+        //     if(cart.products[i].codeProduct===product.code){
+        //         cart.products[i].quantity++;
+        //         locate = true;
+        //         break;
+        //     }
+        // };
+        // if(!locate){
             // const orderProduct = {...product};
             // orderProduct.idProduct = product._id;
             // orderProduct.codeProduct = product.code;
             // orderProduct.quantity = quantity;
-            cart.products.push({product:`${product._id}`});
-        }
-        //ACTUALIZA EL CARRITO CON EL NUEVO PRODUCTO
-        // await cartModel.findByIdAndUpdate(cart._id,cart);
-        let cartWant = await cartModel.findOne({_id:`${cart._id}`})
-        console.log(JSON.stringify(cartWant,null,'\t'));
+            // cart.products.push({product:`${product._id}`});
+        // }
+        //ACTUALIZA EL CARRITO CON PRODUCTO
+        cart.products.push({product:`${product._id}`});
+        await cartModel.findByIdAndUpdate(cart._id,cart);
+        //MUESTRA QUE EL POPULATE ANDA BIEN
+        // let cartWant = await cartModel.findOne({_id:`${cart._id}`})
+        // console.log(JSON.stringify(cartWant,null,'\t'));
     }catch(err){
         throw err
     }
