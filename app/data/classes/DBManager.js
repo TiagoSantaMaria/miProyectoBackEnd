@@ -137,12 +137,17 @@ async addProductToCart(cart,product,quantity){
 }
 async deleteTotalProduct(cart,product){
     try{
-        const newProducts = cart.products.filter((prod)=>prod.product.code !== product.code);
+        const newProducts = cart.products.filter((prod)=>JSON.stringify(prod.product._id) !== JSON.stringify(product._id));
         cart.products = newProducts;
         await cartModel.findByIdAndUpdate(cart._id,cart);
     }catch(err){
         throw err
     }
+}
+async cleanCart(cart){
+    const products = []
+    cart.products = products;
+    await cartModel.findByIdAndUpdate(cart._id,cart);
 }
 }
 

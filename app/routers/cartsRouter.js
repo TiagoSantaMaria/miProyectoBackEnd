@@ -37,6 +37,27 @@ cartsRouter.post("/:cid/product/:pid", async(req,res)=>{
     }
 })
 
+//Endpoint para actualizar todo los productos que queremos actualiar
+cartsRouter.put("/:cid", async(req,res)=>{
+    try{
+        const id = req.params;
+        const newProducts = req.body;
+        const cart = await cartManager.readOneByID(id.cid);
+        if(!!cart){
+            cartManager.cleanCart(cart);
+            for(let i=0;i<newProducts.length;i++){
+                const product = await productManager.readOneByID(newProducts[i].idProduct)
+                cartManager.addProductToCart(cart,product,newProducts[i].quantity);
+            }
+            res.status(200).send("Carrito Actualizado con exito");
+        }else{
+            res.status(400).send("Carrito No encontrado");
+        }
+    }catch(err){
+        throw err
+    }
+})
+
 //Endpoint para eliminar producto del Carrito
 cartsRouter.delete("/:cid/product/:pid", async(req,res)=>{
     try{
@@ -55,8 +76,6 @@ cartsRouter.delete("/:cid/product/:pid", async(req,res)=>{
         throw err
     }
 })
-
-//Endpoint para actualizar todo los productos que queremos actualiar
 
 
 
