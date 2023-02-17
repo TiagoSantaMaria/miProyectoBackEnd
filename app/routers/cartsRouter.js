@@ -56,6 +56,10 @@ cartsRouter.delete("/:cid/product/:pid", async(req,res)=>{
     }
 })
 
+//Endpoint para actualizar todo los productos que queremos actualiar
+
+
+
 //  //Endpoint para mostrar los productos del carrito ingresado
 // cartsRouter.get("/:cid", async(req,res)=>{
 //     const {cid} = req.params;

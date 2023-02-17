@@ -113,28 +113,21 @@ async readOneByID(id) {
         throw err;
     }
 }
-//leer anotaciones, ya que tengo un inconveniente con el manejo de la cantidad
 async addProductToCart(cart,product,quantity){
     try{
-        //CON ESTO VALIDABA QUE NO SE CARGUE MUCHAS VECES UN MISMO PRODUCTO, SINO QUE AUMENTEEL ATRIBUTO QUANTITY PERO CON MONGOOSE Y EL POPULATE NO SE HACERLO
-        // let locate = false;
-        // for(let i=0; i<cart.products.length; i++){
-        //     if(cart.products[i].codeProduct===product.code){
-        //         cart.products[i].quantity++;
-        //         locate = true;
-        //         break;
-        //     }
-        // };
-        // if(!locate){
-            // const orderProduct = {...product};
-            // orderProduct.idProduct = product._id;
-            // orderProduct.codeProduct = product.code;
-            // orderProduct.quantity = quantity;
-            // cart.products.push({product:`${product._id}`});
-        // }
         //ACTUALIZA EL CARRITO CON PRODUCTO
-        cart.products.push({product:`${product._id}`});
-        await cartModel.findByIdAndUpdate(cart._id,cart);
+        let haveProduct=false
+        cart.products.map(async(prod)=>{
+            if(JSON.stringify(prod.product._id) === JSON.stringify(product._id)){
+                prod.quantity++;
+                console.log(prod.quantity);
+                haveProduct = true;
+                await cartModel.findByIdAndUpdate(cart._id,cart);
+            }})
+        if(haveProduct===false){
+            cart.products.push({product:`${product._id}`, quantity:`${quantity}`});
+            await cartModel.findByIdAndUpdate(cart._id,cart);
+        }
         //MUESTRA QUE EL POPULATE ANDA BIEN
         // let cartWant = await cartModel.findOne({_id:`${cart._id}`})
         // console.log(JSON.stringify(cartWant,null,'\t'));
