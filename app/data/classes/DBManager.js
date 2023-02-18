@@ -149,6 +149,18 @@ async cleanCart(cart){
     cart.products = products;
     await cartModel.findByIdAndUpdate(cart._id,cart);
 }
+async updateQuantityProducts(cart,product,quantity){
+    try{
+        cart.products.map((prod)=>{
+            if(JSON.stringify(prod.product._id)===JSON.stringify(product._id)){
+                prod.quantity=quantity;
+            }
+        })
+        await cartModel.findByIdAndUpdate(cart._id,cart);
+    }catch(err){
+        throw err
+    }
+}
 }
 
 module.exports = {
