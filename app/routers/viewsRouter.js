@@ -8,13 +8,23 @@ const viewsRouter = express.Router();
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
-ProductManagerDB
+
 //ENDPOINTS
 viewsRouter.get('/products', async(req,res)=>{
-    const products = await productManager.read();
-    
-    res.render('home', {products, stylesheet: 'viewProducts'});
+    try {
+        const {category = null} = req.query;
+        const {page = 1} = req.query;
+        const {limit = 10} = req.query;
+        const {sort = null} = req.query;
+        const response = await productManager.paginate(category,page,limit,sort);
+        // console.log(response)
+        res.render('home', {response, stylesheet: 'viewProducts'});
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 })
+
+
 
 viewsRouter.get('/realtimeproducts', async(req,res)=>{
     const products = await productManager.read();
@@ -24,4 +34,5 @@ viewsRouter.get('/realtimeproducts', async(req,res)=>{
 //Exportar modulo
 module.exports = {
     viewsRouter,
-    };
+};
+

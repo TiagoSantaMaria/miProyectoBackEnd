@@ -15,6 +15,7 @@ const productManager = new ProductManagerDB;
 productsRouter.get("/", async (req, res) => {
     try {
         const {category = null} = req.query;
+        console.log(category);
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
