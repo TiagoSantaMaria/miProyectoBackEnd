@@ -1,6 +1,5 @@
 //IMPORTS
 const mongoose = require("mongoose");
-// const { userModel } = require("./models/users.model");
 
 
 // IMPORTAR MODULO PRODUCT ROUTERimage.png

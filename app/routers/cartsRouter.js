@@ -88,7 +88,6 @@ cartsRouter.delete("/:cid/product/:pid", async(req,res)=>{
         throw err
     }
 })
-
 //Endpointpara mostrar los carritos
 cartsRouter.get("/",async(req,res)=>{
     try{
