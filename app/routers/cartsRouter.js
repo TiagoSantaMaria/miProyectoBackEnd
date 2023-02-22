@@ -97,7 +97,6 @@ cartsRouter.get("/",async(req,res)=>{
         throw err;
     }
 })
-
 //Endpoint para mostrar los productos del carrito ingresado
 cartsRouter.get("/:cid", async(req,res)=>{
     const {cid} = req.params;
@@ -109,6 +108,7 @@ cartsRouter.get("/:cid", async(req,res)=>{
         res.status(200).send(productCart);
     }
 })
+
 //Exportar modulo
 module.exports = {
     cartsRouter,

@@ -4,7 +4,7 @@
             <li>Nombre Producto: {{this.title}}</li>
             <li>Precio: {{this.price}}</li>
             <li>Stock: {{this.stock}}</li>
-            <button onclick="agregarAlCarrito('{{this._id}}','{{this.title}}','{{this.price}}')">AGREGAR PRODUCTO AL CARRITO</button>
+            <button method="POST PUT" onclick="agregarAlCarrito('{{this._id}}','{{this.title}}','{{this.price}}')">AGREGAR PRODUCTO AL CARRITO</button>
         </hr>
     {{/each}}
     <div>
@@ -13,5 +13,6 @@
     </div>
     
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>

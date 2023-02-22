@@ -126,7 +126,7 @@ async addProductToCart(cart,product,quantity){
         cart.products.map(async(prod)=>{
             if(JSON.stringify(prod.product._id) === JSON.stringify(product._id)){
                 prod.quantity++;
-                console.log(prod.quantity);
+                // console.log(prod.quantity);
                 haveProduct = true;
                 await cartModel.findByIdAndUpdate(cart._id,cart);
             }})
