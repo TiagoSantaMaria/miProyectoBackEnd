@@ -1,7 +1,7 @@
 [
     {
         "title": "monitor",
-        "description": "240hz",
+        "info": "240hz",
         "price": 45000,
         "thumbnail": "rutaImagen2",
         "stock": 8,
@@ -12,7 +12,7 @@
     },
     {
         "title": "celular",
-        "description": "s21",
+        "info": "s21",
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 8,
@@ -23,7 +23,7 @@
     },
     {
         "title": "notebook",
-        "description": "i9",
+        "info": "i9",
         "price": 2250,
         "thumbnail": "rutaImagen",
         "stock": 10,
@@ -34,7 +34,7 @@
     },
     {
         "title": "tablet",
-        "description": "ultimate generation",
+        "info": "ultimate generation",
         "price": 1500,
         "thumbnail": "rutaImagen",
         "stock": 10,
@@ -42,82 +42,5 @@
         "status": true,
         "category": "electronic",
         "id": 4
-    },
-    {
-        "title": "car",
-        "description": "220 km/h",
-        "price": 35000,
-        "thumbnail": "rutaImagen",
-        "stock": 20,
-        "code": "4571",
-        "status": true,
-        "category": "electronic",
-        "id": 5
-    },
-    {
-        "title": "mouse",
-        "description": "logitech",
-        "price": 3250,
-        "thumbnail": "rutaImagen",
-        "stock": 3,
-        "code": "1247",
-        "status": true,
-        "category": "electronic",
-        "id": 6
-    },
-    {
-        "title": "motorcycle",
-        "description": "120 km/h",
-        "price": 35000,
-        "thumbnail": "rutaImagen",
-        "stock": 20,
-        "code": 421,
-        "status": true,
-        "category": "electronic",
-        "id": 7
-    },
-    {
-        "title": "Iphone",
-        "description": "14 ProMax",
-        "price": 95000,
-        "thumbnail": "rutaImagen",
-        "stock": 10,
-        "code": 21,
-        "status": true,
-        "category": "electronic",
-        "id": 8
-    },
-    {
-        "title": "Tiago",
-        "description": "120 km/h",
-        "price": 35000,
-        "thumbnail": "rutaImagen",
-        "stock": 20,
-        "code": 123,
-        "status": true,
-        "category": "electronic",
-        "id": 9
-    },
-    {
-        "title": "Juan",
-        "description": "120 km/h",
-        "price": 35000,
-        "thumbnail": "rutaImagen",
-        "stock": 20,
-        "code": 321,
-        "status": true,
-        "category": "electronic",
-        "id": 10
-    },
-    {
-        "title": "Ramiro",
-        "description": "120 km/h",
-        "price": 35000,
-        "thumbnail": "rutaImagen",
-        "stock": 20,
-        "code": 457,
-        "status": true,
-        "category": "electronic",
-        "id": 11
     }
 ]

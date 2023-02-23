@@ -1,4 +1,6 @@
 //IMPORTS
+const mongoose = require("mongoose");
+
 
 // IMPORTAR MODULO PRODUCT ROUTERimage.png
 const { productsRouter } = require('./routers/productsRouter');
@@ -8,6 +10,15 @@ const { cartsRouter } = require('./routers/cartsRouter');
 const { viewsRouter } = require('./routers/viewsRouter');
 //IMPORTO MIDDLEWARE
 const { injectSocketMiddleWare } = require('./routers/middlewares');
+//IMPORTO DOTENV Y SUS VARIABLES
+const dotenv = require("dotenv");
+dotenv.config();
+const PORT = process.env.SERVER_PORT || 8080;
+console.log(PORT);
+//Consultar porque no me toma el port en el app.listen
+const DB_USER=process.env.USER_MONGO;
+const DB_PASS=process.env.PASS_MONGO;
+const DB_NAME=process.env.DB_MONGO;
 
 //CONTS/VARS
 
@@ -23,6 +34,7 @@ const handlebars = require("express-handlebars");
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+
 
 //CONFIGURACIONES SERVER
 
@@ -61,3 +73,15 @@ socketServer.on('connection', (socket) =>{
     //     socket.broadcast.emit('broadcast','mensaje broadcast');
     //     socketServer.emit('multicast','mensaje multicast');
     // })
+
+// mongoose.connect("mongodb+srv://tiagoSantaMaria:yosoy2001@codercluster.gvuqwfs.mongodb.net/usuarios3757?retryWrites=true&w=majority", (error)=>{
+//     if(error){
+//         console.log("Error al conectar la Basede Datos")
+//     }
+// })
+
+//LEVANTO BD
+const environment = async () =>{
+    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
+}
+environment();
