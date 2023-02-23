@@ -9,11 +9,12 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
     let productAdd=false;
 
     if(myCart.length===0){
-        //CREA CARRITO
-        jQuery.ajax({
-            method:'POST',
-            url:'http://localhost:8080/api/carts',
-            data:{id:id,nombre:nombre,precio:precio}})
+        await fetch("http://localhost:8080/api/carts", {
+                method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }})
+
             //ME TRAE EL CARRITO CREAO(AHORA ANDA BIEN PERO MAS ADELANTE NO)
             const petition = await fetch('http://localhost:8080/api/carts');
             carts = await petition.json();
@@ -36,15 +37,24 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
             myCart.push(myProducts);
         }
     }
-    jQuery.ajax({
-    method:'POST',
-    url:`http://localhost:8080/api/carts/${carts[carts.length-1]._id}/product/${id}`,
-    data:{id:id,nombre:nombre,precio:precio}});
+    // await fetch("http://localhost:8080/api/carts", {
+    //             method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         }})
+    await fetch(`http://localhost:8080/api/carts/${carts[carts.length-1]._id}/product/${id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({id,nombre,precio})
+    })
     console.log(myCart)
 }
 
 //ARREGLAS A FUTURO 
 /*
+(TIP 1 YA LO ARREGLE)
 1)SUELE PASAR QUE CUANDO AGREGO UN PRODUCTO POR PRIMERA VEZ, Y CREO EL CART,
 CUANDO EJECUTO EL GET CON EL FETCH NO ME LO TRAE, SINO QUE ME TRAE EL ANTERIOR AL CREADO
 RECIENTEMENTE, PARECIERA QUE EL AWAIT A VECES NO FRENA LA EJECUCION PARCIAL DEL CODIGO
