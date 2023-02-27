@@ -23,6 +23,12 @@ viewsRouter.get('/products', async(req,res)=>{
     }
 })
 
+viewsRouter.get('/login',async(req,res)=>{
+    res.render('login');
+})
+viewsRouter.get('/signup',async(req,res)=>{
+    res.render('signup');
+})
 
 
 viewsRouter.get('/realtimeproducts', async(req,res)=>{

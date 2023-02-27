@@ -1,10 +1,16 @@
 //IMPORTS
 const mongoose = require("mongoose");
 
-
-// IMPORTAR MODULO PRODUCT ROUTERimage.png
+const MongoStore = require('connect-mongo')
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
+// IMPORTAR MODULO SIGN UP ROUTER
+const { singupRouter } = require("./routers/signupRouter");
+// IMPORTAR MODULO LOGIN ROUTER
+const { loginRouter } = require("./routers/loginRouter");
+// IMPORTAR MODULO PRODUCT ROUTER
 const { productsRouter } = require('./routers/productsRouter');
-// IMPORTAR MODULO CART ROUTERimage.png
+// IMPORTAR MODULO CART ROUTER
 const { cartsRouter } = require('./routers/cartsRouter');
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/viewsRouter');
@@ -60,6 +66,24 @@ app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 // LLAMO AL CART ROUTER
 app.use('/api/carts', cartsRouter);
+//LLAMO AL LOGIN ROUTER
+app.use('/login',loginRouter);
+//LLAMO AL SIGNUP ROUTER
+app.use('/signup',singupRouter);
+
+// MIDDLEWARE PARA GUARDAR LA SESSION EN MONGO
+// app.use(cookieParser())
+// app.use(session({
+//         store: MongoStore.create({
+//             mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+//             mongoOptions: {useNewUrlParser: true,useUnifiedTopology: true},
+//                 ttl: 15,
+//             }),
+//             secret: "coderhouse",
+//             resave: true,
+//             saveUninitialized: true,
+//         }))
+
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
