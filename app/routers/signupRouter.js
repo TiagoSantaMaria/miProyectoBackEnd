@@ -16,7 +16,6 @@ singupRouter.post("/", async (req, res) => {
             age,
         });
         res.status(201).json({ message: "success", data: user });
-         //res.redirect("/login");
     } catch (error) {
         res.status(500).json({ error: error.message });
         }

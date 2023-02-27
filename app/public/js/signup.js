@@ -15,5 +15,8 @@ addLoggin.addEventListener("click",async (e)=>{
             "Content-Type": "application/json",
         },
         body: JSON.stringify({first_name,last_name,email,password,age})
-        })
+        })        .then((res)=>res.json())
+        .then((data)=>
+            data.message ==="success"?(window.location.href="/login"):alert("Algo ha pasado"))
+        .catch((err)=>console.log(err))
 })

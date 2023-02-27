@@ -14,4 +14,8 @@ addLoggin.addEventListener("click",async (e)=>{
         },
         body: JSON.stringify({email,password})
         })
+        .then((res)=>res.json())
+        .then((data)=>
+            data.message ==="success"?(window.location.href="/products"):alert("Algo ha pasado"))
+        .catch((err)=>console.log(err))
 })
