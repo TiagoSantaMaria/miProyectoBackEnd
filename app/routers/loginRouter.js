@@ -13,8 +13,8 @@ loginRouter.post("/", async (req, res) => {
             password: password,
         });
         if (response) {
-            res.cookie("email", email, { maxAge: 150000 });
-            res.cookie("password", password, { maxAge: 150000 });
+            res.cookie("email", email, { maxAge: 150000, signed:true });
+            res.cookie("password", password, { maxAge: 150000, signed:true });
             res.status(200).json({ message: "success", data: response });
             req.session.email=email;
             console.log(req.session.email);

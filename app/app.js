@@ -58,14 +58,35 @@ app.use((req, res, next)=>{
     req.socket = socketServer;
     next();
 });
-app.use((req, res, next)=>{
-    req.session = session;
-    next();
-});
 
+// MIDDLEWARE PARA GUARDAR LA SESSION EN MONGO
+app.use(cookieParser("CookieProtegida"));
+app.use(session({
+    // store: MongoStore.create({
+    //         mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+    //         mongoOptions: {
+    //             useNewUrlParser: true,
+    //             useUnifiedTopology: true
+    //         },
+    //         ttl: 15,
+    //     }),
+        secret: "coderDB",
+        resave: true,
+        saveUninitialized: true,
+    }))
+
+// app.get('/login',(req,res)=>{
+//     if(req.session.email){
+//         console.log("Existe SESSION");
+//         res.send("HLA")
+//     }else{
+//         req.session.counter=1;
+//         console.log("No Existe");
+//         res.send("HLA")
+//     }
+// })
 
 //ROUTERS
-
 // LLAMO AL VIEWS ROUTER
 app.use('/', viewsRouter);
 // LLAMO AL PRODUCTS ROUTER
@@ -77,22 +98,8 @@ app.use('/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
 app.use('/signup',singupRouter);
 
-
-// MIDDLEWARE PARA GUARDAR LA SESSION EN MONGO
-app.use(session({
-        store: MongoStore.create({
-            mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-            mongoOptions: {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            },
-            ttl: 120,
-        }),
-        secret: "eApp",
-        resave: false,
-        saveUninitialized: false,
-    }))
-
+    
+    
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
