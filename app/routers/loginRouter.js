@@ -2,7 +2,6 @@
 const express = require("express");
 const { userModel } = require("../data/models/users.model");
 
-
 // GENERO EL ROUTER
 const loginRouter = express.Router();
 
@@ -14,7 +13,11 @@ loginRouter.post("/", async (req, res) => {
             password: password,
         });
         if (response) {
+            res.cookie("email", email, { maxAge: 150000 });
+            res.cookie("password", password, { maxAge: 150000 });
             res.status(200).json({ message: "success", data: response });
+            req.session.email=email;
+            console.log(req.session.email);
         } else {
             res.status(404).json({ message: "error", data: "User not found" });
         }

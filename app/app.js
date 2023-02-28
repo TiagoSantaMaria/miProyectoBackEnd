@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const MongoStore = require('connect-mongo')
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
+
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signupRouter");
 // IMPORTAR MODULO LOGIN ROUTER
@@ -57,6 +58,11 @@ app.use((req, res, next)=>{
     req.socket = socketServer;
     next();
 });
+app.use((req, res, next)=>{
+    req.session = session;
+    next();
+});
+
 
 //ROUTERS
 
@@ -71,24 +77,36 @@ app.use('/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
 app.use('/signup',singupRouter);
 
+
 // MIDDLEWARE PARA GUARDAR LA SESSION EN MONGO
-// app.use(cookieParser())
-// app.use(session({
-//         store: MongoStore.create({
-//             mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-//             mongoOptions: {useNewUrlParser: true,useUnifiedTopology: true},
-//                 ttl: 15,
-//             }),
-//             secret: "coderhouse",
-//             resave: true,
-//             saveUninitialized: true,
-//         }))
+app.use(session({
+        store: MongoStore.create({
+            mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+            mongoOptions: {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            },
+            ttl: 120,
+        }),
+        secret: "eApp",
+        resave: false,
+        saveUninitialized: false,
+    }))
 
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
     console.log("Cliente Conectado");
 })
+
+//LEVANTO BD
+const environment = async () =>{
+    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
+}
+
+environment();
+
+
 
 //EJEMPLOS DE UTILIZACION DE SOCKET
     // socket.on('mensaje',(msj)=>{
@@ -103,9 +121,3 @@ socketServer.on('connection', (socket) =>{
 //         console.log("Error al conectar la Basede Datos")
 //     }
 // })
-
-//LEVANTO BD
-const environment = async () =>{
-    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
-}
-environment();
