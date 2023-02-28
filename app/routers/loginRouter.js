@@ -15,9 +15,11 @@ loginRouter.post("/", async (req, res) => {
         if (response) {
             res.cookie("email", email, { maxAge: 150000, signed:true });
             res.cookie("password", password, { maxAge: 150000, signed:true });
-            res.status(200).json({ message: "success", data: response });
             req.session.email=email;
-            console.log(req.session.email);
+            if(req.session.email==='tiago@gmail.com'){
+                req.session.admin=true;
+            }
+            res.status(200).json({ message: "success", data: response });
         } else {
             res.status(404).json({ message: "error", data: "User not found" });
         }

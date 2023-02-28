@@ -8,9 +8,16 @@ const viewsRouter = express.Router();
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
+function auth(req, res, next) {
+    console.log(req.session.email);
+    if (req.session?.email === 'tiago@gmail.com' && req.session?.admin) {
+        return next()
+    }
+    return res.status(401).send('error de autorización!')
+}
 
 //ENDPOINTS
-viewsRouter.get('/products', async(req,res)=>{
+viewsRouter.get('/products',auth,async(req,res)=>{
     try {
         const {category = null} = req.query;
         const {page = 1} = req.query;

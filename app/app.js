@@ -53,38 +53,35 @@ app.use(express.urlencoded({ extended: true }));
 
 //MIDDLEWARES
 
-// AGREGO SOCKET A REQ
+// PARA AGREGAR SOCKET A REQ
 app.use((req, res, next)=>{
     req.socket = socketServer;
     next();
 });
 
-// MIDDLEWARE PARA GUARDAR LA SESSION EN MONGO
+// PARA AUTENTIFICAR QUE SEA EL ADMIN
+function auth(req, res, next) {
+    if (req.session?.email === 'tiago@gmail.com' && req.session?.admin) {
+        return next()
+    }
+    return res.status(401).send('error de autorización!')
+}
+
+// PARA GUARDAR LA SESSION EN MONGO
 app.use(cookieParser("CookieProtegida"));
 app.use(session({
-    // store: MongoStore.create({
-    //         mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-    //         mongoOptions: {
-    //             useNewUrlParser: true,
-    //             useUnifiedTopology: true
-    //         },
-    //         ttl: 15,
-    //     }),
+    store: MongoStore.create({
+            mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+            mongoOptions: {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            },
+            ttl: 15,
+        }),
         secret: "coderDB",
-        resave: true,
-        saveUninitialized: true,
+        resave: false,
+        saveUninitialized: false,
     }))
-
-// app.get('/login',(req,res)=>{
-//     if(req.session.email){
-//         console.log("Existe SESSION");
-//         res.send("HLA")
-//     }else{
-//         req.session.counter=1;
-//         console.log("No Existe");
-//         res.send("HLA")
-//     }
-// })
 
 //ROUTERS
 // LLAMO AL VIEWS ROUTER
