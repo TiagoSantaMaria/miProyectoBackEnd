@@ -8,40 +8,50 @@ const viewsRouter = express.Router();
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
+//FUNCION PARA QUE UNAVEZ LOGUEADO NO PUEDAS DIRIGIRTE AL LOGIN O SIGNUP
 function auth(req, res, next) {
-    console.log(req.session.email);
-    if (req.session?.email === 'tiago@gmail.com' && req.session?.admin) {
+    if (!!req.session?.email) {
+        return res.status(401).send('Usted ya esta Logeado')
+    }
+    return next()
+}
+//FUNCION PARA QUE SI NO ESTAS LOGUEADO NO PUEDAS DIRIGIRTE AL PROFILE
+function authProfile(req, res, next) {
+    if (req.session?.email) {
         return next()
     }
-    return res.status(401).send('error de autorización!')
+    return res.status(401).send('Usted debe estar Logeado')
 }
 
 //ENDPOINTS
-viewsRouter.get('/products',auth,async(req,res)=>{
+viewsRouter.get('/products',authProfile,async(req,res)=>{
     try {
         const {category = null} = req.query;
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
         const response = await productManager.paginate(category,page,limit,sort);
-        res.render('home', {response, stylesheet: 'viewProducts'});
+        const response2 = (req.session);
+        res.render('home', {response, response2, stylesheet: 'viewProducts'});
     } catch (err) {
         res.status(500).send(err.message);
     }
 })
-
-viewsRouter.get('/login',async(req,res)=>{
+viewsRouter.get('/login',auth,async(req,res)=>{
     res.render('login');
 })
-viewsRouter.get('/signup',async(req,res)=>{
+viewsRouter.get('/signup',auth,async(req,res)=>{
     res.render('signup');
 })
-
-
 viewsRouter.get('/realtimeproducts', async(req,res)=>{
     const products = await productManager.read();
     res.render('realTimeProducts', {products, stylesheet: 'viewProducts'});
 });
+
+viewsRouter.get('/profile',authProfile, async(req,res)=>{
+    const response = (req.session);
+    res.render('profile', {response});
+})
 
 //Exportar modulo
 module.exports = {

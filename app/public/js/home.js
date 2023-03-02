@@ -37,11 +37,6 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
             myCart.push(myProducts);
         }
     }
-    // await fetch("http://localhost:8080/api/carts", {
-    //             method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         }})
     await fetch(`http://localhost:8080/api/carts/${carts[carts.length-1]._id}/product/${id}`, {
         method: "POST",
         headers: {
@@ -51,6 +46,17 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
     })
     console.log(myCart)
 }
+
+const cerrarSession = async() =>{
+    await fetch('http://localhost:8080/profile',{
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+}
+
+
 
 //ARREGLAS A FUTURO 
 /*

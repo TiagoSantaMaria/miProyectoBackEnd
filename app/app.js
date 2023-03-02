@@ -5,6 +5,8 @@ const MongoStore = require('connect-mongo')
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 
+// IMPORTAR MODULO PROFILE ROUTER
+const { profileRouter } = require("./routers/profileRouter");
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signupRouter");
 // IMPORTAR MODULO LOGIN ROUTER
@@ -67,7 +69,7 @@ function auth(req, res, next) {
     return res.status(401).send('error de autorización!')
 }
 
-// PARA GUARDAR LA SESSION EN MONGO
+// PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
 app.use(session({
     store: MongoStore.create({
@@ -83,7 +85,9 @@ app.use(session({
         saveUninitialized: false,
     }))
 
+
 //ROUTERS
+
 // LLAMO AL VIEWS ROUTER
 app.use('/', viewsRouter);
 // LLAMO AL PRODUCTS ROUTER
@@ -94,9 +98,9 @@ app.use('/api/carts', cartsRouter);
 app.use('/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
 app.use('/signup',singupRouter);
+//LLAMO AL PROFILE ROUTER
+app.use('/profile',profileRouter);
 
-    
-    
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
