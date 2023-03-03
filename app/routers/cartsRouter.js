@@ -23,16 +23,20 @@ cartsRouter.post("/", async(req,res)=>{
 });
 // //Endpoint para rellenar el carrito
 cartsRouter.post("/:cid/product/:pid", async(req,res)=>{
-    const id = req.params;
-    if(!!id.cid && id.pid){
-        const cart = await cartManager.readOneByID(id.cid);
-        const product = await productManager.readOneByID(id.pid);
-        if(!cart || !product){
-            res.status(400).send("El Producto no pudo ser Agregado!")
-        }else{
-            cartManager.addProductToCart(cart,product,1);
-            res.status(200).send("Producto Agregado!")
+    try{
+        const id = req.params;
+        if(!!id.cid && id.pid){
+            const cart = await cartManager.readOneByID(id.cid);
+            const product = await productManager.readOneByID(id.pid);
+            if(!cart || !product){
+                res.status(400).send("El Producto no pudo ser Agregado!")
+            }else{
+                cartManager.addProductToCart(cart,product,1);
+                res.status(200).send("Producto Agregado!")
+            }
         }
+    }catch(err){
+        throw err
     }
 })
 //Endpoint para actualizar todo los productos que queremos actualiar
@@ -57,17 +61,21 @@ cartsRouter.put("/:cid", async(req,res)=>{
 })
 //Endpoinr para actualizar la cantidad de un producto
 cartsRouter.put("/:cid/product/:pid", async(req,res)=>{
-    const id = req.params;
-    const {quantity} = req.body;
-    if(!!id.cid && id.pid){
-        const cart = await cartManager.readOneByID(id.cid);
-        const product = await productManager.readOneByID(id.pid);
-        if(!cart || !product){
-            res.status(400).send("El Producto no pudo ser Actulizado!")
-        }else{
-            cartManager.updateQuantityProducts(cart,product,quantity);
-            res.status(200).send("Producto Agregado!")
+    try{
+        const id = req.params;
+        const {quantity} = req.body;
+        if(!!id.cid && id.pid){
+            const cart = await cartManager.readOneByID(id.cid);
+            const product = await productManager.readOneByID(id.pid);
+            if(!cart || !product){
+                res.status(400).send("El Producto no pudo ser Actulizado!")
+            }else{
+                cartManager.updateQuantityProducts(cart,product,quantity);
+                res.status(200).send("Producto Agregado!")
+            }
         }
+    }catch(err){
+        throw err
     }
 })
 //Endpoint para eliminar producto del Carrito

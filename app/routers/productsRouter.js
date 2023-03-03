@@ -20,7 +20,7 @@ productsRouter.get("/", async (req, res) => {
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
         const response = await productManager.paginate(category,page,limit, sort);
-        res.send(response)
+        res.status(200).send(response)
     } catch (err) {
         res.status(500).send(err.message);
     }
