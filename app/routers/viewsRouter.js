@@ -38,19 +38,35 @@ viewsRouter.get('/products',authProfile,async(req,res)=>{
     }
 })
 viewsRouter.get('/login',auth,async(req,res)=>{
-    res.render('login');
+    try{
+        res.render('login');
+    }catch(err){
+        res.status(500).send(err.message);
+    }
 })
 viewsRouter.get('/signup',auth,async(req,res)=>{
-    res.render('signup');
+    try{
+        res.render('signup');
+    }catch(err){
+        res.status(500).send(err.message);
+    }
 })
 viewsRouter.get('/realtimeproducts', async(req,res)=>{
-    const products = await productManager.read();
-    res.render('realTimeProducts', {products, stylesheet: 'viewProducts'});
+    try{
+        const products = await productManager.read();
+        res.render('realTimeProducts', {products, stylesheet: 'viewProducts'});
+    }catch(err){
+        res.status(500).send(err.message);
+    }
 });
 
 viewsRouter.get('/profile',authProfile, async(req,res)=>{
-    const response = (req.session);
-    res.render('profile', {response});
+    try{
+        const response = (req.session);
+        res.render('profile', {response});
+    }catch(err){
+        res.status(500).send(err.message);
+    }
 })
 
 //Exportar modulo
