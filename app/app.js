@@ -1,6 +1,7 @@
 //IMPORTS
 const mongoose = require("mongoose");
 
+//IMPORTS PARA USAR SESSION DE MONGO Y COOKIES
 const MongoStore = require('connect-mongo')
 const session = require('express-session');
 const cookieParser = require("cookie-parser");

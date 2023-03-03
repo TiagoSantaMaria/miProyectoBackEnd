@@ -10,14 +10,14 @@ const productManager = new ProductManagerDB;
 
 //FUNCION PARA QUE UNAVEZ LOGUEADO NO PUEDAS DIRIGIRTE AL LOGIN O SIGNUP
 function auth(req, res, next) {
-    if (!!req.session?.email) {
+    if (!!req.session.user?.email) {
         return res.status(401).send('Usted ya esta Logeado')
     }
     return next()
 }
 //FUNCION PARA QUE SI NO ESTAS LOGUEADO NO PUEDAS DIRIGIRTE AL PROFILE
 function authProfile(req, res, next) {
-    if (req.session?.email) {
+    if (req.session.user?.email) {
         return next()
     }
     return res.status(401).send('Usted debe estar Logeado')
@@ -62,7 +62,8 @@ viewsRouter.get('/realtimeproducts', async(req,res)=>{
 
 viewsRouter.get('/profile',authProfile, async(req,res)=>{
     try{
-        const response = (req.session);
+        const response = (req.session.user);
+        console.log(response);
         res.render('profile', {response});
     }catch(err){
         res.status(500).send(err.message);
