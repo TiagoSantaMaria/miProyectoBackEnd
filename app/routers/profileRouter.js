@@ -5,10 +5,14 @@ const express = require("express");
 const profileRouter = express.Router();
 
 profileRouter.delete("/", async(req,res)=>{
-    req.session.destroy();
-    res.clearCookie('email');
-    res.clearCookie('password');
-    res.status(201).json({ message: "success" });
+    try{
+        req.session.destroy();
+        res.clearCookie('email');
+        res.clearCookie('password');
+        res.status(201).json({ message: "success" });
+    }catch(error){
+        res.status(500).json({ error: error.message });
+    }
 })
 
 module.exports = {

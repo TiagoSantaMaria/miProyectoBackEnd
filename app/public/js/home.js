@@ -54,6 +54,10 @@ const cerrarSession = async() =>{
             "Content-Type": "application/json",
         }
     })
+    .then((res)=>res.json())
+    .then((data)=>
+        data.message ==="success"?(window.location.href="/login"):alert("Algo ha pasado"))
+    .catch((err)=>console.log(err))
 }
 
 
