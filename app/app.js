@@ -95,11 +95,11 @@ app.use('/api/products', productsRouter);
 // LLAMO AL CART ROUTER
 app.use('/api/carts', cartsRouter);
 //LLAMO AL LOGIN ROUTER
-app.use('/login',loginRouter);
+app.use('/api/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
-app.use('/signup',singupRouter);
+app.use('/api/signup',singupRouter);
 //LLAMO AL PROFILE ROUTER
-app.use('/profile',profileRouter);
+app.use('/api/profile',profileRouter);
 
 
 //LEVANTO SERVER

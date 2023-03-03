@@ -9,7 +9,7 @@ addLoggin.addEventListener("click",async (e)=>{
     const password = document.getElementById("password").value;
     const age = document.getElementById("age").value;
 
-    await fetch("http://localhost:8080/signup", {
+    await fetch("http://localhost:8080/api/signup", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
