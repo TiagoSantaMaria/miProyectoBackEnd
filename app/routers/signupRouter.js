@@ -11,12 +11,12 @@ const { createHash } = require("../utils");
 // GENERO EL ROUTER
 const singupRouter = express.Router();
 
-singupRouter.post("/",passport.authenticate("register",{failureRedirect:"/api/signup/failregister"}),async (req,res)=>{
+singupRouter.post("/",passport.authenticate("register",{failureRedirect:"/failregister"}),async (req,res)=>{
     res.status(201).json({ message: "success" });
 })
 
 singupRouter.get("/failregister",async(req,res)=>{
-    res.status(500).json({ message: "unsuccess" });
+    res.send({ error: "Failed SignUP" });
 })
 
 // singupRouter.post("/", async (req, res) => {

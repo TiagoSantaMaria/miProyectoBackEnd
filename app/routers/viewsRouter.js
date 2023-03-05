@@ -27,14 +27,14 @@ viewsRouter.get('/products',authProfile,async(req,res)=>{
 })
 viewsRouter.get('/login',auth,async(req,res)=>{
     try{
-        res.render('login');
+        res.render('login', {stylesheet: 'viewProducts'});
     }catch(err){
         res.status(500).send(err.message);
     }
 })
 viewsRouter.get('/signup',auth,async(req,res)=>{
     try{
-        res.render('signup');
+        res.render('signup',{stylesheet: 'viewProducts'});
     }catch(err){
         res.status(500).send(err.message);
     }
