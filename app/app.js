@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const MongoStore = require('connect-mongo')
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
-
+// IMPORTAR PASSPORT
+const passport = require("passport");
+const { initializePassport } = require("./config/passport.config");
 // IMPORTAR MODULO PROFILE ROUTER
 const { profileRouter } = require("./routers/profileRouter");
 // IMPORTAR MODULO SIGN UP ROUTER
@@ -18,8 +20,7 @@ const { productsRouter } = require('./routers/productsRouter');
 const { cartsRouter } = require('./routers/cartsRouter');
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/viewsRouter');
-//IMPORTO MIDDLEWARE
-const { injectSocketMiddleWare } = require('./routers/middlewares');
+
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
 dotenv.config();
@@ -45,9 +46,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
-
 //CONFIGURACIONES SERVER
-
 // DECLARO ESTATICA LA CARPETA PUBLIC
 app.use(express.static("./public"));
 // LINEAS DE CODIGO PARA EL MANEJO DE INFORMACION (VAN SIEMPRE)
@@ -62,13 +61,6 @@ app.use((req, res, next)=>{
     next();
 });
 
-// PARA AUTENTIFICAR QUE SEA EL ADMIN
-function auth(req, res, next) {
-    if (req.session?.email === 'tiago@gmail.com' && req.session?.admin) {
-        return next()
-    }
-    return res.status(401).send('error de autorización!')
-}
 
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
@@ -86,6 +78,10 @@ app.use(session({
         saveUninitialized: false,
     }))
 
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //ROUTERS
 
@@ -100,7 +96,7 @@ app.use('/api/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
 app.use('/api/signup',singupRouter);
 //LLAMO AL PROFILE ROUTER
-app.use('/api/profile',profileRouter);
+app.use('/api/profile', profileRouter);
 
 
 //LEVANTO SERVER

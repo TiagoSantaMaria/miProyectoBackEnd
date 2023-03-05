@@ -8,20 +8,8 @@ const viewsRouter = express.Router();
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
-//FUNCION PARA QUE UNAVEZ LOGUEADO NO PUEDAS DIRIGIRTE AL LOGIN O SIGNUP
-function auth(req, res, next) {
-    if (!!req.session.user?.email) {
-        return res.status(401).send('Usted ya esta Logeado')
-    }
-    return next()
-}
-//FUNCION PARA QUE SI NO ESTAS LOGUEADO NO PUEDAS DIRIGIRTE AL PROFILE
-function authProfile(req, res, next) {
-    if (req.session.user?.email) {
-        return next()
-    }
-    return res.status(401).send('Usted debe estar Logeado')
-}
+// IMPORTO AUTHORIZACIONES
+const {auth, authProfile} = require("../routers/middlewares")
 
 //ENDPOINTS
 viewsRouter.get('/products',authProfile,async(req,res)=>{
@@ -31,7 +19,7 @@ viewsRouter.get('/products',authProfile,async(req,res)=>{
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
         const response = await productManager.paginate(category,page,limit,sort);
-        const response2 = (req.session);
+        const response2 = (req.session.user);
         res.render('home', {response, response2, stylesheet: 'viewProducts'});
     } catch (err) {
         res.status(500).send(err.message);
@@ -58,13 +46,11 @@ viewsRouter.get('/realtimeproducts', async(req,res)=>{
     }catch(err){
         res.status(500).send(err.message);
     }
-});
-
+})
 viewsRouter.get('/profile',authProfile, async(req,res)=>{
     try{
         const response = (req.session.user);
-        console.log(response);
-        res.render('profile', {response});
+        res.render('profile', {response, stylesheet: 'viewProducts'});
     }catch(err){
         res.status(500).send(err.message);
     }
