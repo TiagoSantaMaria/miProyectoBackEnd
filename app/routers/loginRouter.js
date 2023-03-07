@@ -10,7 +10,7 @@ const loginRouter = express.Router();
 
 loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
     if (!req.user){
-        return res.status(400).send({status:'error',error:'Invalid credentials'});
+        return res.status(200).json({ message: "unsuccess" });
     }else{
         req.session.user={
             first_name: req.user.first_name,
@@ -25,6 +25,14 @@ loginRouter.get("/faillogin",async(req,res)=>{
     res.send({error:"Fail Login"})
 })
 
+
+loginRouter.get('/github', passport.authenticate('github',{scope:['user:email']}),async(req,res)=>{})
+
+loginRouter.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
+    req.session.user = req.user;
+    console.log(req.session.user)
+    res.redirect('/products');
+})
 
 // loginRouter.post("/", async (req, res) => {
 //     const { email, password } = req.body;

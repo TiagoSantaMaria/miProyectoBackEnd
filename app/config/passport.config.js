@@ -2,6 +2,7 @@ const passport = require("passport");
 const local = require("passport-local");
 const { userModel } = require("../data/models/users.model");
 const { createHash, isValidPassword } = require("../utils");
+const GitHubStrategy = require("passport-github2")
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () =>{
@@ -44,6 +45,31 @@ const initializePassport = () =>{
             }
         }catch(err){
             return done(err);
+        }
+    }))
+    passport.use('github', new GitHubStrategy({
+        clientID:'Iv1.2911d2a81d622cd1',
+        clientSecret:'00eac46094e36c6e711c4e542d88ff10eab837e7',
+        callbackURL: 'http://localhost:8080/api/login/githubcallback'
+    },async (accessToken, refreshToken, profile, done)=>{
+        try{
+            // console.log(profile);
+            let user = await userModel.findOne({email:profile._json.email});
+            if(!user){
+                let newUser = {
+                    first_name:profile._json.name,
+                    last_name:'',
+                    age:18,
+                    email:profile._json.email,
+                    password:''
+                }
+                let result = await userModel.create(newUser);
+                done (null,result)
+            }else{
+                done(null, user)
+            }
+        }catch(error){
+            return done(error)
         }
     }))
     passport.serializeUser((user, done)=>{
