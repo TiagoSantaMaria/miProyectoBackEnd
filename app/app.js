@@ -98,7 +98,6 @@ app.use('/api/signup',singupRouter);
 //LLAMO AL PROFILE ROUTER
 app.use('/api/profile', profileRouter);
 
-
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
     console.log("Cliente Conectado");

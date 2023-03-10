@@ -43,7 +43,8 @@ cartsRouter.post("/:cid/product/:pid", async(req,res)=>{
 cartsRouter.put("/:cid", async(req,res)=>{
     try{
         const id = req.params;
-        const newProducts = req.body;
+        const productsBody = req.body;
+        const newProducts = productsBody.myCart;
         const cart = await cartManager.readOneByID(id.cid);
         if(!!cart){
             cartManager.cleanCart(cart);
@@ -96,7 +97,7 @@ cartsRouter.delete("/:cid/product/:pid", async(req,res)=>{
         throw err
     }
 })
-//Endpointpara mostrar los carritos
+//Endpoint para mostrar los carritos
 cartsRouter.get("/",async(req,res)=>{
     try{
         const carts = await cartManager.read();

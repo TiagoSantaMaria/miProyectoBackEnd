@@ -1,8 +1,17 @@
 // IMPORTO MODULO EXPRESS
 const express = require("express");
+const { UserManagerDB } = require("../data/classes/DBManager");
+const userManager = new UserManagerDB;
 
 // GENERO EL ROUTER
 const profileRouter = express.Router();
+
+profileRouter.post("/", async(req,res)=>{
+    const {idCart} = req.body;
+    userManager.addCartToUser(req.session.user.email,idCart);
+    res.status(200).json({message:"succes"})
+})
+
 
 profileRouter.delete("/", async(req,res)=>{
     try{

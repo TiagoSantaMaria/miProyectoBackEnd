@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
-const {cartModel} = require("../models/carts.model");
-const {productModel} = require("../models/products.model");
+const { cartModel } = require("../models/carts.model");
+const { productModel } = require("../models/products.model");
+const { userModel } = require("../models/users.model");
 
 class ProductManagerDB{
     async read(limit=null){
@@ -169,7 +170,25 @@ async updateQuantityProducts(cart,product,quantity){
 }
 }
 
+class UserManagerDB{
+async addCartToUser(email, idCart){
+    try{
+        const cart = await cartModel.findById(idCart)
+        const user = await userModel.find({email});
+        user[0].carts.push({cart:`${cart._id}`});
+        console.log(user[0]);
+        await userModel.findByIdAndUpdate(user[0]._id,user[0]);
+        //MUESTRA QUE EL POPULATE ANDA BIEN
+        // let userWant = await userModel.findOne({_id:`${user[0]._id}`})
+        // console.log(JSON.stringify(userWant,null,'\t'));
+    }catch(err){
+        throw err
+    }
+}
+}
+
 module.exports = {
     ProductManagerDB,
-    CartManagerDB
+    CartManagerDB,
+    UserManagerDB
     };

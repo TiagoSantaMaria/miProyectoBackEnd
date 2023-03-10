@@ -25,8 +25,6 @@ cartSchema.pre("findById", function () {
     this.populate("products.product");
 });
 
-
-
 const cartModel = mongoose.model(cartCollection,cartSchema);
 module.exports = {
     cartModel

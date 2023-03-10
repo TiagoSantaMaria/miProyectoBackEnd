@@ -8,6 +8,8 @@ const LocalStrategy = local.Strategy;
 const initializePassport = () =>{
     passport.use("register", new LocalStrategy(
         {passReqToCallback:true, usernameField:'email'}, async (req,username,password,done) =>{
+            console.log(username);
+            console.log(password);
             const {first_name,last_name,email,age} = req.body;
             try{
                 if(!first_name || !last_name || !email || !password || !age){
@@ -24,7 +26,8 @@ const initializePassport = () =>{
                     last_name,
                     email,
                     age,
-                    password:createHash(password)
+                    password:createHash(password),
+                    role:'user'
                 }
                 let result = await userModel.create(newUser);
                 return done(null,result);

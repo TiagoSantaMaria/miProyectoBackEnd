@@ -6,45 +6,25 @@ let myCart = []
 const agregarAlCarrito = async (id,nombre,precio) =>{
     let myProducts={};
     let find=false;
-    let productAdd=false;
-
     if(myCart.length===0){
-        await fetch("http://localhost:8080/api/carts", {
-                method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }})
-
-            //ME TRAE EL CARRITO CREAO(AHORA ANDA BIEN PERO MAS ADELANTE NO)
-            const petition = await fetch('http://localhost:8080/api/carts');
-            carts = await petition.json();
-            console.log(carts[carts.length-1]);
             //AGREGO EL PRODUCTO AL CARRITO
+            myProducts.idProduct = id;
             myProducts.quantity = 0;
-            myProducts.id = id;
             myCart.push(myProducts);
         }
     if(myCart.length!==0){
         myCart.map((prod)=>{
-            if(prod.id===id){
+            if(prod.idProduct===id){
                 prod.quantity++;
                 find=true;
             }
         })
         if(find===false){
+            myProducts.idProduct = id;
             myProducts.quantity = 1;
-            myProducts.id = id;
             myCart.push(myProducts);
         }
     }
-    await fetch(`http://localhost:8080/api/carts/${carts[carts.length-1]._id}/product/${id}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({id,nombre,precio})
-    })
-    console.log(myCart)
 }
 
 const cerrarSession = async() =>{
@@ -60,6 +40,39 @@ const cerrarSession = async() =>{
     .catch((err)=>console.log(err))
 }
 
+const confirmarCompra = async() =>{
+    console.log(myCart)
+    //CREA EL CARRITO
+    await fetch("http://localhost:8080/api/carts", {
+        method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    }})
+
+    //ME TRAE EL CARRITO CREADO
+    const petition = await fetch('http://localhost:8080/api/carts');
+    carts = await petition.json();
+
+    //ACTUALIZO EL CARRITO CON LOS PRODS DEL CARRITO
+    await fetch(`http://localhost:8080/api/carts/${carts[carts.length-1]._id}`, {
+        method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify({myCart})
+    })
+
+    //ASIGNO CARRITO AL USUARIO
+    idCart = carts[carts.length-1]._id;
+    await fetch(`http://localhost:8080/api/profile`, {
+        method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify({idCart})
+    })
+
+}
 
 
 //ARREGLAS A FUTURO 
