@@ -15,7 +15,7 @@ const cartManager = new CartManagerDB;
 //Enpoint para crear el carrito
 cartsRouter.post("/", async(req,res)=>{
     try {
-        const response = await cartManager.create();
+        const response = await cartManager.create(req.session.user.email);
         res.status(200).send({ message: "Carrito creado", response });
         } catch (err) {
         res.status(500).send(err.message);

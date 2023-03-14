@@ -1,7 +1,7 @@
 console.log("Se conecto el js");
 
 let carts = {};
-let myCart = []
+let myCart = [];
 
 const agregarAlCarrito = async (id,nombre,precio) =>{
     let myProducts={};
@@ -62,7 +62,7 @@ const confirmarCompra = async() =>{
     body:JSON.stringify({myCart})
     })
 
-    //ASIGNO CARRITO AL USUARIO
+    //ASIGNO CARRITO AL USUARIO // CUANDO CREO EL CARRO SE LE ASIGNA EL ID DEL USER
     idCart = carts[carts.length-1]._id;
     await fetch(`http://localhost:8080/api/profile`, {
         method: "POST",
@@ -71,7 +71,18 @@ const confirmarCompra = async() =>{
     },
     body:JSON.stringify({idCart})
     })
-
+    .then((res)=>res.json())
+    .then((data)=>{
+        if(data.message ==="success"){
+            alert("Compra Registrada");
+            carts = {};
+            myCart = [];
+        }else{
+            alert("Algo ha pasado")
+        }
+    })
+    .catch((err)=>console.log(err))
+    //HABRIA QUE AGREGAR ALGO QUE MUESTRE QUE YA SE GUARDO EL CARRITO
 }
 
 

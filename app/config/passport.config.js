@@ -8,8 +8,6 @@ const LocalStrategy = local.Strategy;
 const initializePassport = () =>{
     passport.use("register", new LocalStrategy(
         {passReqToCallback:true, usernameField:'email'}, async (req,username,password,done) =>{
-            console.log(username);
-            console.log(password);
             const {first_name,last_name,email,age} = req.body;
             try{
                 if(!first_name || !last_name || !email || !password || !age){

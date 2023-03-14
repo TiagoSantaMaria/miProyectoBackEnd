@@ -12,8 +12,15 @@ const cartSchema = new mongoose.Schema({
                 quantity:Number     
             }
         ]
+    },
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
     }
 });
+
+
+
 
 cartSchema.pre("find", function () {
     this.populate("products.product");

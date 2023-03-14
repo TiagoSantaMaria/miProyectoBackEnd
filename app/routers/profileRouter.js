@@ -8,8 +8,12 @@ const profileRouter = express.Router();
 
 profileRouter.post("/", async(req,res)=>{
     const {idCart} = req.body;
-    userManager.addCartToUser(req.session.user.email,idCart);
-    res.status(200).json({message:"succes"})
+    try{
+        userManager.addCartToUser(req.session.user.email,idCart);
+        res.status(200).json({message:"success"})
+    }catch(err){
+        throw err
+    }
 })
 
 

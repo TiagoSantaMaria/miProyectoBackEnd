@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const MongoStore = require('connect-mongo')
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
+
 // IMPORTAR PASSPORT
 const passport = require("passport");
 const { initializePassport } = require("./config/passport.config");
@@ -78,6 +79,7 @@ app.use(session({
         saveUninitialized: false,
     }))
 
+//PASSPORT
 initializePassport()
 app.use(passport.initialize());
 app.use(passport.session());

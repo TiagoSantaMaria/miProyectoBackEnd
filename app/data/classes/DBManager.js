@@ -95,9 +95,11 @@ class ProductManagerDB{
 }
 
 class CartManagerDB{
-async create() {
+async create(userEmail) {
     try {
+        const user = await userModel.findOne({userEmail});
         const newCart = new cartModel();
+        newCart.userId = user._id;
         await newCart.save();
         return newCart;
     } catch (err) {
@@ -176,7 +178,6 @@ async addCartToUser(email, idCart){
         const cart = await cartModel.findById(idCart)
         const user = await userModel.find({email});
         user[0].carts.push({cart:`${cart._id}`});
-        console.log(user[0]);
         await userModel.findByIdAndUpdate(user[0]._id,user[0]);
         //MUESTRA QUE EL POPULATE ANDA BIEN
         // let userWant = await userModel.findOne({_id:`${user[0]._id}`})
