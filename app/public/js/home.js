@@ -82,7 +82,6 @@ const confirmarCompra = async() =>{
         }
     })
     .catch((err)=>console.log(err))
-    //HABRIA QUE AGREGAR ALGO QUE MUESTRE QUE YA SE GUARDO EL CARRITO
 }
 
 

@@ -12,12 +12,14 @@ const initializePassport = () =>{
             try{
                 if(!first_name || !last_name || !email || !password || !age){
                     // FALTAN INGRESAR DATOS
-                    return done("FALTAN INGRESAR DATOS");
+                    return done (null, false)
+                    // return done("FALTAN INGRESAR DATOS");
                 }
                 let user = await userModel.findOne({email:username});
                 if(user){
                     // EMAIL YA REGISTRADO
-                    return done("EMAIL YA REGISTRADO");
+                    return done (null, false)
+                    // return done("EMAIL YA REGISTRADO");
                 }
                 const newUser = {
                     first_name,
@@ -54,15 +56,15 @@ const initializePassport = () =>{
         callbackURL: 'http://localhost:8080/api/login/githubcallback'
     },async (accessToken, refreshToken, profile, done)=>{
         try{
-            // console.log(profile);
             let user = await userModel.findOne({email:profile._json.email});
             if(!user){
                 let newUser = {
-                    first_name:profile._json.name,
-                    last_name:'',
-                    age:18,
-                    email:profile._json.email,
-                    password:''
+                    first_name:profile._json.name || "gitHubName",
+                    last_name:'GitHub',
+                    age:'',
+                    email:profile._json.email || profile._json.id,
+                    password:'',
+                    role:'user'
                 }
                 let result = await userModel.create(newUser);
                 done (null,result)

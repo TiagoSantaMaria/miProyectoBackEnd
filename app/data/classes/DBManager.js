@@ -97,7 +97,8 @@ class ProductManagerDB{
 class CartManagerDB{
 async create(userEmail) {
     try {
-        const user = await userModel.findOne({userEmail});
+        let user = {}
+        user = await userModel.findOne({email:userEmail});
         const newCart = new cartModel();
         newCart.userId = user._id;
         await newCart.save();

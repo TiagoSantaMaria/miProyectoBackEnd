@@ -21,6 +21,8 @@ const { productsRouter } = require('./routers/productsRouter');
 const { cartsRouter } = require('./routers/cartsRouter');
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/viewsRouter');
+// IMPORTAR MODULO CURRENT ROUTER
+const { currentRouter } = require("./routers/currentRouter");
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
@@ -99,6 +101,8 @@ app.use('/api/login',loginRouter);
 app.use('/api/signup',singupRouter);
 //LLAMO AL PROFILE ROUTER
 app.use('/api/profile', profileRouter);
+//LLAMO AL CURRENT ROUTER
+app.use('/api/current', currentRouter);
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{

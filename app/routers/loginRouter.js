@@ -11,7 +11,7 @@ const loginRouter = express.Router();
 //LOGIN CON DATOS
 loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
     if (!req.user){
-        return res.status(200).json({ message: "unsuccess" });
+        return res.status(400).json({ message: "unsuccess" });
     }else{
         req.session.user={
             first_name: req.user.first_name,
@@ -25,6 +25,7 @@ loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin
 loginRouter.get("/faillogin",async(req,res)=>{
     res.send({error:"Fail Login"})
 })
+
 //LOGIN CON GITHUB
 loginRouter.get('/github', passport.authenticate('github',{scope:['user:email']}),async(req,res)=>{})
 loginRouter.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
