@@ -5,70 +5,12 @@ const { productModel } = require("../models/products.model");
 const { userModel } = require("../models/users.model");
 
 class ProductManagerDB{
-    async read(limit=null){
-        try{
-            if(!limit){
-                const products = await productModel.find().lean();
-                return products;
-            }else{
-                const products = await productModel.find().limit(limit);
-                return products
-            }
-        }catch(err){
-            throw err;
-        }
-    }
-    async paginate(query,page,limit,sort){
-        try{
-            let response ={};
-            let nextPage;
-            let prevPage;
-            if (query!=null){
-                if(!sort){
-                    response = await productModel.paginate({category:`${query}`},{page:`${page}`, limit:`${limit}`, lean:true});
-                }else{
-                    response = await productModel.paginate({category:`${query}`},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`, lean:true});
-                }
-                nextPage = `http://localhost:8080/products?category=${query}&page=${+page+1}&limit=${limit}&sort=${sort}`;
-                prevPage = `http://localhost:8080/products?category=${query}&page=${+page-1}&limit=${limit}&sort=${sort}`;
-            }else{
-                if(!sort){
-                    response = await productModel.paginate({},{page:`${page}`, limit:`${limit}`, lean:true});
-                }else{
-                    response = await productModel.paginate({},{sort:{price:`${sort}`},page:`${page}`, limit:`${limit}`, lean:true});
-                }
-                nextPage = `http://localhost:8080/products?page=${+page+1}&limit=${limit}&sort=${sort}`;
-                prevPage = `http://localhost:8080/products?page=${+page-1}&limit=${limit}&sort=${sort}`;
-            }
-            const responseServer = {...response}
-            responseServer.status="Succes";
-            if(responseServer.hasNextPage){
-                responseServer.nextLink=nextPage;
-            }else{responseServer.nextLink=null}
-            if(responseServer.hasPrevPage){
-                responseServer.prevLink=prevPage;
-            }else{responseServer.prevLink=null}
-            return(responseServer);
-            
-        }catch(err){
-            throw err;
-        }
-    }
-    async readOneByID(id){
-        try{
-            const product = await productModel.findById(id);
-            return product;
-        }catch(err){
-            throw err;
-        }
-    }
     async create(product, code) {
         try {
             const productFind = await productModel.find({code:`${code}`})
             if(!productFind.length){
                 const newProduct = new productModel(product);
-                await newProduct.save();
-                return true;
+                return newProduct;
             }else{
                 return false
             }
@@ -91,35 +33,16 @@ class ProductManagerDB{
         } catch (err) {
             throw err;
         }
-    }      
+    }  
 }
 
 class CartManagerDB{
-async create(userEmail) {
+async create(user) {
     try {
-        let user = {}
-        user = await userModel.findOne({email:userEmail});
         const newCart = new cartModel();
         newCart.userId = user._id;
-        await newCart.save();
         return newCart;
     } catch (err) {
-        throw err;
-    }
-}
-async read() {
-    try {
-        const carts = await cartModel.find().lean();
-        return carts;
-    } catch (err) {
-        throw err;
-    }
-}
-async readOneByID(id) {
-    try{
-        const cart = await cartModel.findById(id);
-        return cart;
-    }catch(err){
         throw err;
     }
 }
@@ -145,6 +68,7 @@ async addProductToCart(cart,product,quantity){
         throw err
     }
 }
+
 async deleteTotalProduct(cart,product){
     try{
         const newProducts = cart.products.filter((prod)=>JSON.stringify(prod.product._id) !== JSON.stringify(product._id));
@@ -154,11 +78,13 @@ async deleteTotalProduct(cart,product){
         throw err
     }
 }
+
 async cleanCart(cart){
     const products = []
     cart.products = products;
     await cartModel.findByIdAndUpdate(cart._id,cart);
 }
+
 async updateQuantityProducts(cart,product,quantity){
     try{
         cart.products.map((prod)=>{
@@ -171,6 +97,7 @@ async updateQuantityProducts(cart,product,quantity){
         throw err
     }
 }
+
 }
 
 class UserManagerDB{

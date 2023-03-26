@@ -8,6 +8,11 @@ const viewsRouter = express.Router();
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
+//IMPORTO E INICIO DAO
+const { productsDao } = require("../dao/products.dao");
+const memoryProductsDao = new productsDao;
+
+
 // IMPORTO AUTHORIZACIONES
 const {auth, authProfile} = require("../routers/middlewares")
 
@@ -18,7 +23,7 @@ viewsRouter.get('/products',authProfile,async(req,res)=>{
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
-        const response = await productManager.paginate(category,page,limit,sort);
+        const response = await memoryProductsDao.paginate(category,page,limit,sort);
         const response2 = (req.session.user);
         res.render('home', {response, response2, stylesheet: 'viewProducts'});
     } catch (err) {

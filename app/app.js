@@ -9,20 +9,36 @@ const cookieParser = require("cookie-parser");
 // IMPORTAR PASSPORT
 const passport = require("passport");
 const { initializePassport } = require("./config/passport.config");
+
 // IMPORTAR MODULO PROFILE ROUTER
 const { profileRouter } = require("./routers/profileRouter");
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signupRouter");
 // IMPORTAR MODULO LOGIN ROUTER
 const { loginRouter } = require("./routers/loginRouter");
-// IMPORTAR MODULO PRODUCT ROUTER
-const { productsRouter } = require('./routers/productsRouter');
-// IMPORTAR MODULO CART ROUTER
-const { cartsRouter } = require('./routers/cartsRouter');
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/viewsRouter');
 // IMPORTAR MODULO CURRENT ROUTER
 const { currentRouter } = require("./routers/currentRouter");
+
+
+
+// IMPORTO EL ROUTER NUEVO PATRON MVC
+const { cartsRouter } = require("./routers/carts.routes");
+const { productsRouter } = require("./routers/products.routes");
+
+
+
+
+
+//IMPORTO TODOS LOS DAO Y LOS INICIO
+const { cartsDao } = require("./dao/carts.dao");
+const memoryCartsDao = new cartsDao();
+const { usersDao } = require("./dao/users.dao");
+const memoryUsersDao = new usersDao();
+const { productsDao } = require("./dao/products.dao");
+const memoryProductsDao = new productsDao()
+
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
@@ -80,7 +96,6 @@ app.use(session({
         resave: false,
         saveUninitialized: false,
     }))
-
 //PASSPORT
 initializePassport()
 app.use(passport.initialize());
@@ -91,10 +106,9 @@ app.use(passport.session());
 
 // LLAMO AL VIEWS ROUTER
 app.use('/', viewsRouter);
-// LLAMO AL PRODUCTS ROUTER
-app.use('/api/products', productsRouter);
+
 // LLAMO AL CART ROUTER
-app.use('/api/carts', cartsRouter);
+// app.use('/api/carts', cartsRouter);
 //LLAMO AL LOGIN ROUTER
 app.use('/api/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
@@ -103,6 +117,14 @@ app.use('/api/signup',singupRouter);
 app.use('/api/profile', profileRouter);
 //LLAMO AL CURRENT ROUTER
 app.use('/api/current', currentRouter);
+
+
+//LO NUEVO CON MVC
+// LLAMO AL PRODUCTS ROUTER
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+
+
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
@@ -116,6 +138,12 @@ const environment = async () =>{
 
 environment();
 
+
+module.exports = {
+    memoryCartsDao,
+    memoryUsersDao,
+    memoryProductsDao
+    };
 
 
 //EJEMPLOS DE UTILIZACION DE SOCKET
