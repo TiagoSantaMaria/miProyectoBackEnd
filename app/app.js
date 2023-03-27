@@ -1,15 +1,44 @@
 //IMPORTS
 const mongoose = require("mongoose");
 
+//IMPORTS PARA USAR SESSION DE MONGO Y COOKIES
+const MongoStore = require('connect-mongo')
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
-// IMPORTAR MODULO PRODUCT ROUTERimage.png
-const { productsRouter } = require('./routers/productsRouter');
-// IMPORTAR MODULO CART ROUTERimage.png
-const { cartsRouter } = require('./routers/cartsRouter');
+// IMPORTAR PASSPORT
+const passport = require("passport");
+const { initializePassport } = require("./config/passport.config");
+
+
+
+// IMPORTAR MODULO SIGN UP ROUTER
+const { singupRouter } = require("./routers/signup.routes");
+// IMPORTAR MODULO LOGIN ROUTER
+const { loginRouter } = require("./routers/login.routes");
 // IMPORTAR MODULO VIEWS ROUTER
-const { viewsRouter } = require('./routers/viewsRouter');
-//IMPORTO MIDDLEWARE
-const { injectSocketMiddleWare } = require('./routers/middlewares');
+const { viewsRouter } = require('./routers/views.routes');
+
+// IMPORTAR MODULO CURRENT ROUTER
+
+
+// IMPORTO EL ROUTER NUEVO PATRON MVC
+const { cartsRouter } = require("./routers/carts.routes");
+const { productsRouter } = require("./routers/products.routes");
+const { profileRouter } = require("./routers/profile.routes");
+const { currentRouter } = require("./routers/current.routes");
+
+
+
+//IMPORTO TODOS LOS DAO Y LOS INICIO
+const { cartsDao } = require("./dao/carts.dao");
+const memoryCartsDao = new cartsDao();
+const { usersDao } = require("./dao/users.dao");
+const memoryUsersDao = new usersDao();
+const { productsDao } = require("./dao/products.dao");
+const memoryProductsDao = new productsDao()
+
+
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
 dotenv.config();
@@ -35,9 +64,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
-
 //CONFIGURACIONES SERVER
-
 // DECLARO ESTATICA LA CARPETA PUBLIC
 app.use(express.static("./public"));
 // LINEAS DE CODIGO PARA EL MANEJO DE INFORMACION (VAN SIEMPRE)
@@ -46,25 +73,72 @@ app.use(express.urlencoded({ extended: true }));
 
 //MIDDLEWARES
 
-// AGREGO SOCKET A REQ
+// PARA AGREGAR SOCKET A REQ
 app.use((req, res, next)=>{
     req.socket = socketServer;
     next();
 });
 
+
+// PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
+app.use(cookieParser("CookieProtegida"));
+app.use(session({
+    store: MongoStore.create({
+            mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+            mongoOptions: {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            },
+            ttl: 15,
+        }),
+        secret: "coderDB",
+        resave: false,
+        saveUninitialized: false,
+    }))
+//PASSPORT
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 //ROUTERS
 
 // LLAMO AL VIEWS ROUTER
 app.use('/', viewsRouter);
+app.use('/api/login',loginRouter);
+//LLAMO AL SIGNUP ROUTER
+app.use('/api/signup',singupRouter);
+
+//LO NUEVO CON MVC
 // LLAMO AL PRODUCTS ROUTER
-app.use('/api/products', productsRouter);
+app.use("/api/products", productsRouter);
 // LLAMO AL CART ROUTER
-app.use('/api/carts', cartsRouter);
+app.use("/api/carts", cartsRouter);
+//LLAMO AL PROFILE ROUTER
+app.use('/api/profile', profileRouter);
+//LLAMO AL CURRENT ROUTER
+app.use('/api/current', currentRouter);
+
 
 //LEVANTO SERVER
 socketServer.on('connection', (socket) =>{
     console.log("Cliente Conectado");
 })
+
+//LEVANTO BD
+const environment = async () =>{
+    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
+}
+
+environment();
+
+
+module.exports = {
+    memoryCartsDao,
+    memoryUsersDao,
+    memoryProductsDao
+    };
+
 
 //EJEMPLOS DE UTILIZACION DE SOCKET
     // socket.on('mensaje',(msj)=>{
@@ -79,9 +153,3 @@ socketServer.on('connection', (socket) =>{
 //         console.log("Error al conectar la Basede Datos")
 //     }
 // })
-
-//LEVANTO BD
-const environment = async () =>{
-    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
-}
-environment();
