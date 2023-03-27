@@ -10,24 +10,23 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const { initializePassport } = require("./config/passport.config");
 
-// IMPORTAR MODULO PROFILE ROUTER
-const { profileRouter } = require("./routers/profileRouter");
-// IMPORTAR MODULO SIGN UP ROUTER
-const { singupRouter } = require("./routers/signupRouter");
-// IMPORTAR MODULO LOGIN ROUTER
-const { loginRouter } = require("./routers/loginRouter");
-// IMPORTAR MODULO VIEWS ROUTER
-const { viewsRouter } = require('./routers/viewsRouter');
-// IMPORTAR MODULO CURRENT ROUTER
-const { currentRouter } = require("./routers/currentRouter");
 
+
+// IMPORTAR MODULO SIGN UP ROUTER
+const { singupRouter } = require("./routers/signup.routes");
+// IMPORTAR MODULO LOGIN ROUTER
+const { loginRouter } = require("./routers/login.routes");
+// IMPORTAR MODULO VIEWS ROUTER
+const { viewsRouter } = require('./routers/views.routes');
+
+// IMPORTAR MODULO CURRENT ROUTER
 
 
 // IMPORTO EL ROUTER NUEVO PATRON MVC
 const { cartsRouter } = require("./routers/carts.routes");
 const { productsRouter } = require("./routers/products.routes");
-
-
+const { profileRouter } = require("./routers/profile.routes");
+const { currentRouter } = require("./routers/current.routes");
 
 
 
@@ -106,24 +105,19 @@ app.use(passport.session());
 
 // LLAMO AL VIEWS ROUTER
 app.use('/', viewsRouter);
-
-// LLAMO AL CART ROUTER
-// app.use('/api/carts', cartsRouter);
-//LLAMO AL LOGIN ROUTER
 app.use('/api/login',loginRouter);
 //LLAMO AL SIGNUP ROUTER
 app.use('/api/signup',singupRouter);
-//LLAMO AL PROFILE ROUTER
-app.use('/api/profile', profileRouter);
-//LLAMO AL CURRENT ROUTER
-app.use('/api/current', currentRouter);
-
 
 //LO NUEVO CON MVC
 // LLAMO AL PRODUCTS ROUTER
 app.use("/api/products", productsRouter);
+// LLAMO AL CART ROUTER
 app.use("/api/carts", cartsRouter);
-
+//LLAMO AL PROFILE ROUTER
+app.use('/api/profile', profileRouter);
+//LLAMO AL CURRENT ROUTER
+app.use('/api/current', currentRouter);
 
 
 //LEVANTO SERVER

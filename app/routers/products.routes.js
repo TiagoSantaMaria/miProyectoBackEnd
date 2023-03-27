@@ -20,9 +20,6 @@ productsRouter.put("/:pid", modifyProduct)
 //Endpoint para eliminar un producto
 productsRouter.delete("/:pid", deleteProduct)
 
-
-
-
 module.exports={
     productsRouter
 }

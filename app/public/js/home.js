@@ -62,26 +62,26 @@ const confirmarCompra = async() =>{
     body:JSON.stringify({myCart})
     })
 
-    // //ASIGNO CARRITO AL USUARIO // CUANDO CREO EL CARRO SE LE ASIGNA EL ID DEL USER
-    // idCart = carts[carts.length-1]._id;
-    // await fetch(`http://localhost:8080/api/profile`, {
-    //     method: "POST",
-    // headers: {
-    //     "Content-Type": "application/json",
-    // },
-    // body:JSON.stringify({idCart})
-    // })
-    // .then((res)=>res.json())
-    // .then((data)=>{
-    //     if(data.message ==="success"){
-    //         alert("Compra Registrada");
-    //         carts = {};
-    //         myCart = [];
-    //     }else{
-    //         alert("Algo ha pasado")
-    //     }
-    // })
-    // .catch((err)=>console.log(err))
+    //ASIGNO CARRITO AL USUARIO // CUANDO CREO EL CARRO SE LE ASIGNA EL ID DEL USER
+    idCart = carts[carts.length-1]._id;
+    await fetch(`http://localhost:8080/api/profile`, {
+        method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify({idCart})
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+        if(data.message ==="success"){
+            alert("Compra Registrada");
+            carts = {};
+            myCart = [];
+        }else{
+            alert("Algo ha pasado")
+        }
+    })
+    .catch((err)=>console.log(err))
 }
 
 

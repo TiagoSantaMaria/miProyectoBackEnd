@@ -14,7 +14,7 @@ const memoryProductsDao = new productsDao;
 
 
 // IMPORTO AUTHORIZACIONES
-const {auth, authProfile} = require("../routers/middlewares")
+const {auth, authProfile} = require("./middlewares")
 
 //ENDPOINTS
 viewsRouter.get('/products',authProfile,async(req,res)=>{
