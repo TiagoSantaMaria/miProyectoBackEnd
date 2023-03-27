@@ -25,10 +25,10 @@ const showProductById = async(req,res)=>{
             if(!productById)res.status(400).send(`El producto con id:${pid} no se encuentra registrado`);
             if(!!productById)res.status(200).send(productById);
         }else{
-            res.status(400).send("Not Found")
+            res.status(400).send("PRODUCT NOT FOUND")
         }
     }catch(err){
-        throw err;
+        res.status(500).send(err.message);
     }
 }
 const addNewProduct = async(req,res)=>{
