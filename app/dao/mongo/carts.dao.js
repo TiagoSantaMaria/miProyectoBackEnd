@@ -1,4 +1,4 @@
-const { cartModel } = require("../data/models/carts.model");
+const { cartModel } = require("./models/carts.model");
 
 class cartsDao{
     async read() {

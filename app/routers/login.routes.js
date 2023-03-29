@@ -1,7 +1,7 @@
 // IMPORTO MODULO EXPRESS
 const express = require("express");
 const passport = require("passport");
-const { userModel } = require("../data/models/users.model");
+const { userModel } = require("../dao/mongo/models/users.model");
 const { isValidPassword } = require("../utils");
 
 

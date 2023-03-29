@@ -1,4 +1,4 @@
-const { userModel } = require("../data/models/users.model");
+const { userModel } = require("../mongo/models/users.model");
 
 class usersDao{
     async readById(userEmail){

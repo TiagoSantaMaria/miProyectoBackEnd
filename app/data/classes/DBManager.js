@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const { cartModel } = require("../models/carts.model");
-const { productModel } = require("../models/products.model");
-const { userModel } = require("../models/users.model");
+const { cartModel } = require("../../dao/mongo/models/carts.model");
+const { productModel } = require("../../dao/mongo/models/products.model");
+const { userModel } = require("../../dao/mongo/models/users.model");
 
 class ProductManagerDB{
     async create(product, code) {
