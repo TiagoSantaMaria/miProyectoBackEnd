@@ -10,8 +10,6 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const { initializePassport } = require("./config/passport.config");
 
-
-
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signup.routes");
 // IMPORTAR MODULO LOGIN ROUTER
@@ -21,23 +19,11 @@ const { viewsRouter } = require('./routers/views.routes');
 
 // IMPORTAR MODULO CURRENT ROUTER
 
-
 // IMPORTO EL ROUTER NUEVO PATRON MVC
 const { cartsRouter } = require("./routers/carts.routes");
 const { productsRouter } = require("./routers/products.routes");
 const { profileRouter } = require("./routers/profile.routes");
 const { currentRouter } = require("./routers/current.routes");
-
-
-
-//IMPORTO TODOS LOS DAO Y LOS INICIO
-const { cartsDao } = require("./dao/carts.dao");
-const memoryCartsDao = new cartsDao();
-const { usersDao } = require("./dao/users.dao");
-const memoryUsersDao = new usersDao();
-const { productsDao } = require("./dao/products.dao");
-const memoryProductsDao = new productsDao()
-
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
@@ -54,10 +40,13 @@ const DB_NAME=process.env.DB_MONGO;
 // SETEAR SERVER
 const express = require('express');
 const app = express();
+
 //SETEAR SOCKET
 const {Server} = require('socket.io');
+
 // LEVANTAR SERVER
 const socketServer = new Server(app.listen(8080));
+
 // SETEAR HANDLEBARSz
 const handlebars = require("express-handlebars");
 app.engine("handlebars", handlebars.engine());
@@ -79,7 +68,6 @@ app.use((req, res, next)=>{
     next();
 });
 
-
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
 app.use(session({
@@ -95,11 +83,11 @@ app.use(session({
         resave: false,
         saveUninitialized: false,
     }))
+
 //PASSPORT
 initializePassport()
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 //ROUTERS
 
@@ -119,8 +107,7 @@ app.use('/api/profile', profileRouter);
 //LLAMO AL CURRENT ROUTER
 app.use('/api/current', currentRouter);
 
-
-//LEVANTO SERVER
+//LEVANTO SERVER SOCKET
 socketServer.on('connection', (socket) =>{
     console.log("Cliente Conectado");
 })
@@ -131,14 +118,6 @@ const environment = async () =>{
 }
 
 environment();
-
-
-module.exports = {
-    memoryCartsDao,
-    memoryUsersDao,
-    memoryProductsDao
-    };
-
 
 //EJEMPLOS DE UTILIZACION DE SOCKET
     // socket.on('mensaje',(msj)=>{

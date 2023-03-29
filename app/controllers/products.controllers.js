@@ -1,5 +1,5 @@
 //IMPORTO DAO NEESARIOS
-const { productsDao } = require("../dao/products.dao");
+const { productsDao } = require("../dao/mongo/products.dao");
 const memoryProductsDao = new productsDao;
 
 const { ProductManagerDB } = require("../data/classes/DBManager");

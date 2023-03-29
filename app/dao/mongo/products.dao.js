@@ -1,7 +1,7 @@
-const { ProductManagerDB } = require("../data/classes/DBManager");
+const { ProductManagerDB } = require("../../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
-const { productModel } = require("../data/models/products.model");
+const { productModel } = require("../mongo/models/products.model");
 
 class productsDao{
     async paginate(query,page,limit,sort){
@@ -47,7 +47,6 @@ class productsDao{
     async save(newProduct){
         await newProduct.save()
     }
-    
 }
 
 

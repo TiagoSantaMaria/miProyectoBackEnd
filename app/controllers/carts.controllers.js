@@ -1,11 +1,11 @@
 //IMPORTO DAO NECESARIOS
-const { cartsDao } = require("../dao/carts.dao");
+const { cartsDao } = require("../dao/mongo/carts.dao");
 const memoryCartsDao = new cartsDao;
 
-const { usersDao } = require("../dao/users.dao");
+const { usersDao } = require("../dao/mongo/users.dao");
 const memoryUsersDao = new usersDao;
 
-const { productsDao } = require("../dao/products.dao");
+const { productsDao } = require("../dao/mongo/products.dao");
 const memoryProductsDao = new productsDao;
 
 //IMPORTO CLASE
