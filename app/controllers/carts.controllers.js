@@ -1,22 +1,28 @@
+//PATRON REPOSITORY
+const { UserRepository } = require("../repository/users.repository");
+const { CartsRepository } = require("../repository/carts.repository");
+const { ProductsRepository } = require("../repository/products.repository");
+
 //IMPORTO DAO NECESARIOS
-const { cartsDao } = require("../dao/mongo/carts.dao");
+
+const { cartsDao } = require("../dao/mongo/classes/carts.dao");
 const memoryCartsDao = new cartsDao;
+const cartRepository = new CartsRepository(memoryCartsDao);
 
-const { usersDao } = require("../dao/mongo/users.dao");
+const { usersDao } = require("../dao/mongo/classes/users.dao");
 const memoryUsersDao = new usersDao;
+const userRepository = new UserRepository(memoryUsersDao);
 
-const { productsDao } = require("../dao/mongo/products.dao");
+const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
+const productsRepository = new ProductsRepository(memoryProductsDao);
 
-//IMPORTO CLASE
-const { CartManagerDB } = require("../data/classes/DBManager");
-const cartManager = new CartManagerDB;
 
 const createCart = async(req,res)=>{
     try{
-        const user = await memoryUsersDao.readById(req.session.user.email);
-        const cart = await cartManager.create(user);
-        memoryCartsDao.saveCart(cart);
+        const user = await userRepository.getOneById(req.session.user.email);
+        const cart = await cartRepository.create(user);
+        cartRepository.save(cart);
         res.status(201).send({ message: "Carrito creado", cart });
         } catch (err) {
         res.status(500).send(err.message);
@@ -27,12 +33,12 @@ const saveProductsInCart = async (req,res)=>{
         const id = req.params;
         const productsBody = req.body;
         const newProducts = productsBody.myCart;
-        const cart = await memoryCartsDao.readOneById(id.cid);
+        const cart = await cartRepository.getOneById(id.cid);
         if(!!cart){
-            cartManager.cleanCart(cart);
+            cartRepository.cleanAllProductsInCart(cart);
             for(let i=0;i<newProducts.length;i++){
-                const product = await memoryProductsDao.readOneById(newProducts[i].idProduct)
-                cartManager.addProductToCart(cart,product,newProducts[i].quantity);
+                const product = await productsRepository.getOneById(newProducts[i].idProduct);
+                cartRepository.addProductToCart(cart,product,newProducts[i].quantity);
             }
             res.status(200).send("Carrito Actualizado con exito");
         }else{
@@ -46,12 +52,14 @@ const addProductToCart = async(req,res)=>{
     try{
         const id = req.params;
         if(!!id.cid && id.pid){
-            const cart = await memoryCartsDao.readOneById(id.cid);
-            const product = await memoryProductsDao.readOneById(id.pid);
+            //
+            const cart = await cartRepository.getOneById(id.cid);
+            const product = await productsRepository.getOneById(id.pid);
             if(!cart || !product){
                 res.status(400).send("El Producto no pudo ser Agregado!")
             }else{
-                cartManager.addProductToCart(cart,product,1);
+                //
+                cartRepository.addProductToCart(cart,product,1);
                 res.status(200).send("Producto Agregado!")
             }
         }
@@ -61,24 +69,24 @@ const addProductToCart = async(req,res)=>{
 }
 const showCarts = async(req,res)=>{
     try{
-        const carts = await memoryCartsDao.read();
+        const carts = await cartRepository.getAll();
         res.status(200).send(carts);
     }catch(err){
         res.status(500).send(err.message);
     }
 }
-//AUN NO IMPLEMENTADA EN UNA VIEW - EN PASSPORT ANDA BIEN
+//AUN NO IMPLEMENTADA EN UNA VIEW - EN POSTMAN ANDA BIEN
 const updateQuantity = async(req,res)=>{
     try{
         const id = req.params;
         const {quantity} = req.body;
         if(!!id.cid && id.pid){
-            const cart = await memoryCartsDao.readOneById(id.cid);
-            const product = await memoryProductsDao.readOneById(id.pid);
+            const cart = await cartRepository.getOneById(id.cid);
+            const product = await productsRepository.getOneById(id.pid);
             if(!cart || !product){
                 res.status(400).send("El Producto no pudo ser Actulizado!")
             }else{
-                cartManager.updateQuantityProducts(cart,product,quantity);
+                cartRepository.updateQuantityProducts(cart,product,quantity);
                 res.status(200).send("Producto Agregado!")
             }
         }
@@ -86,17 +94,17 @@ const updateQuantity = async(req,res)=>{
         res.status(500).send(err.message);
     }
 }
-//AUN NO IMPLEMENTADA EN UNA VIEW - EN PASSPORT ANDA BIEN
+//AUN NO IMPLEMENTADA EN UNA VIEW - EN POSTMAN ANDA BIEN
 const deleteProductInCart = async(req,res)=>{
     try{
         const id = req.params;
         if(!!id.cid && id.pid){
-            const cart = await memoryCartsDao.readOneById(id.cid);
-            const product = await memoryProductsDao.readOneById(id.pid);
+            const cart = await cartRepository.getOneById(id.cid);
+            const product = await productsRepository.getOneById(id.pid);
             if(!cart || !product){
                 res.status(400).send("El Producto no pudo ser Eliminado!")
             }else{
-                cartManager.deleteTotalProduct(cart,product);
+                cartRepository.deleteTotalProduct(cart,product);
                 res.status(200).send("Producto Eliminado!")
             }
         }
@@ -108,7 +116,7 @@ const deleteProductInCart = async(req,res)=>{
 const showProductsInCart = async(req,res)=>{
     try{
         const {cid} = req.params;
-        const cart = await memoryCartsDao.readOneById(cid);
+        const cart = cartRepository.getOneById(cid);
         if(!cart){
             res.status(400).send("CART NOT FOUND");
         }else{

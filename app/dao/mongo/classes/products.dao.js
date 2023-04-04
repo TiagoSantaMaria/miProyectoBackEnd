@@ -1,7 +1,4 @@
-const { ProductManagerDB } = require("../../data/classes/DBManager");
-const productManager = new ProductManagerDB;
-
-const { productModel } = require("../mongo/models/products.model");
+const { productModel } = require("../../mongo/models/products.model");
 
 class productsDao{
     async paginate(query,page,limit,sort){
@@ -46,6 +43,36 @@ class productsDao{
     }
     async save(newProduct){
         await newProduct.save()
+    }
+    //------------
+    async create(product, code) {
+        try {
+            const productFind = await productModel.find({code:`${code}`})
+            if(!productFind.length){
+                const newProduct = new productModel(product);
+                return newProduct;
+            }else{
+                return false
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+    async delete(productId) {
+        try {
+            const result = await productModel.findByIdAndDelete(productId);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+    async updateProduct(productId, product) {
+        try {
+            const result = await productModel.findByIdAndUpdate(productId, product);
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

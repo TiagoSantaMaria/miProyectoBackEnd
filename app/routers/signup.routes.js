@@ -2,12 +2,6 @@
 const express = require("express");
 const passport = require("passport");
 
-const { userModel } = require("../dao/mongo/models/users.model");
-
-//PARA VALIDACION DECLAVE
-const { createHash } = require("../utils");
-
-
 // GENERO EL ROUTER
 const singupRouter = express.Router();
 

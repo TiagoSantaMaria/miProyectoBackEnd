@@ -1,9 +1,6 @@
 //IMPORTO DAO NEESARIOS
-const { productsDao } = require("../dao/mongo/products.dao");
+const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
-
-const { ProductManagerDB } = require("../data/classes/DBManager");
-const productManager = new ProductManagerDB;
 
 const showProducts = async(req,res) =>{
     try {
@@ -39,7 +36,7 @@ const addNewProduct = async(req,res)=>{
             return
         }
         const product = {title, info, code, price, thumbnail, stock, category,  status};
-        const newProduct = await productManager.create(product, code);
+        const newProduct = await memoryProductsDao.create(product, code);
         if(!!newProduct){
             memoryProductsDao.save(newProduct);
             res.status(200).send({ message: "Producto creado", product});
@@ -55,7 +52,7 @@ const modifyProduct = async(req,res)=>{
     if(!!pid){
         const updateProduct = req.body;
         //El signo + sobre id es para transformarlo en number
-        if(await productManager.updateProduct(pid, updateProduct)){
+        if(await memoryProductsDao.updateProduct(pid, updateProduct)){
             res.status(200).send("Producto Actualizado!");
         }else{
             res.status(400).send("El Producto No Pudo Ser Actualizado!");
@@ -65,7 +62,7 @@ const modifyProduct = async(req,res)=>{
 const deleteProduct = async(req,res)=>{
     const { pid } = req.params;
     try {
-        const result = await productManager.delete(pid);
+        const result = await memoryProductsDao.delete(pid);
         res.status(200).send({ message: "Producto eliminado", result });
     } catch (err) {
         res.status(500).send(err.message);

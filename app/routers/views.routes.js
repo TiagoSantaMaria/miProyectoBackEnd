@@ -9,7 +9,7 @@ const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
 
 //IMPORTO E INICIO DAO
-const { productsDao } = require("../dao/mongo/products.dao");
+const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
 
 

@@ -1,9 +1,6 @@
 // IMPORTO MODULO EXPRESS
 const express = require("express");
 const passport = require("passport");
-const { userModel } = require("../dao/mongo/models/users.model");
-const { isValidPassword } = require("../utils");
-
 
 // GENERO EL ROUTER
 const loginRouter = express.Router();

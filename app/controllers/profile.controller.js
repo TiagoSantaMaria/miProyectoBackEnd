@@ -1,11 +1,11 @@
-const { UserManagerDB } = require("../data/classes/DBManager");
-const userManager = new UserManagerDB
+const { usersDao } = require("../dao/mongo/classes/users.dao");
+const memoryUsersDao = new usersDao;
 
 
 const addCartToUser = async(req,res) =>{
     const {idCart} = req.body;
     try{
-        userManager.addCartToUser(req.session.user.email,idCart);
+        memoryUsersDao.addCartToUser(req.session.user.email,idCart);
         res.status(200).json({message:"success"})
     }catch(err){
         throw err
