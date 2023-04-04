@@ -1,6 +1,10 @@
+//PATRON REPOSITORY
+const { ProductsRepository } = require("../repository/products.repository");
+
 //IMPORTO DAO NEESARIOS
 const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
+const productsRepository = new ProductsRepository(memoryProductsDao);
 
 const showProducts = async(req,res) =>{
     try {
@@ -8,7 +12,7 @@ const showProducts = async(req,res) =>{
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
-        const response = await memoryProductsDao.paginate(category,page,limit,sort)
+        const response = await productsRepository.paginate(category,page,limit,sort)
         res.status(200).send(response)
     } catch (err) {
         res.status(500).send(err.message);
@@ -18,7 +22,7 @@ const showProductById = async(req,res)=>{
     try{
         const {pid=null} = req.params;
         if(!!pid){
-            const productById = await memoryProductsDao.readOneById(pid);
+            const productById = await productsRepository.getOneById(pid);
             if(!productById)res.status(400).send(`El producto con id:${pid} no se encuentra registrado`);
             if(!!productById)res.status(200).send(productById);
         }else{
@@ -36,9 +40,9 @@ const addNewProduct = async(req,res)=>{
             return
         }
         const product = {title, info, code, price, thumbnail, stock, category,  status};
-        const newProduct = await memoryProductsDao.create(product, code);
+        const newProduct = await productsRepository.create(product, code);
         if(!!newProduct){
-            memoryProductsDao.save(newProduct);
+            productsRepository.save(newProduct);
             res.status(200).send({ message: "Producto creado", product});
         }else{
             res.status(400).send({ error: "El Codigo del producto esta en uso vigente!" });
@@ -52,7 +56,7 @@ const modifyProduct = async(req,res)=>{
     if(!!pid){
         const updateProduct = req.body;
         //El signo + sobre id es para transformarlo en number
-        if(await memoryProductsDao.updateProduct(pid, updateProduct)){
+        if(await productsRepository.updateProduct(pid, updateProduct)){
             res.status(200).send("Producto Actualizado!");
         }else{
             res.status(400).send("El Producto No Pudo Ser Actualizado!");
@@ -62,7 +66,7 @@ const modifyProduct = async(req,res)=>{
 const deleteProduct = async(req,res)=>{
     const { pid } = req.params;
     try {
-        const result = await memoryProductsDao.delete(pid);
+        const result = await productsRepository.delete(pid);
         res.status(200).send({ message: "Producto eliminado", result });
     } catch (err) {
         res.status(500).send(err.message);

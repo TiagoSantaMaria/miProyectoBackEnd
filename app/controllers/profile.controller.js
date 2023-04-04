@@ -1,11 +1,14 @@
+//PATRON REPOSITORY
+const { UserRepository } = require("../repository/users.repository");
+
 const { usersDao } = require("../dao/mongo/classes/users.dao");
 const memoryUsersDao = new usersDao;
-
+const userRepository = new UserRepository(memoryUsersDao);
 
 const addCartToUser = async(req,res) =>{
     const {idCart} = req.body;
     try{
-        memoryUsersDao.addCartToUser(req.session.user.email,idCart);
+        userRepository.addCartToUser(req.session.user.email,idCart);
         res.status(200).json({message:"success"})
     }catch(err){
         throw err

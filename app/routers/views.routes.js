@@ -4,6 +4,9 @@ const express = require("express");
 // GENERO EL ROUTER
 const viewsRouter = express.Router();
 
+//PATRON REPOSITORY
+const { ProductsRepository } = require("../repository/products.repository");
+
 //INICIALIZACION DE CLASE MASTER
 const { ProductManagerDB } = require("../data/classes/DBManager");
 const productManager = new ProductManagerDB;
@@ -11,10 +14,10 @@ const productManager = new ProductManagerDB;
 //IMPORTO E INICIO DAO
 const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
-
+const productsRepository = new ProductsRepository(memoryProductsDao);
 
 // IMPORTO AUTHORIZACIONES
-const {auth, authProfile} = require("./middlewares")
+const {auth, authProfile} = require("./middlewares");
 
 //ENDPOINTS
 viewsRouter.get('/products',authProfile,async(req,res)=>{
@@ -23,7 +26,7 @@ viewsRouter.get('/products',authProfile,async(req,res)=>{
         const {page = 1} = req.query;
         const {limit = 10} = req.query;
         const {sort = null} = req.query;
-        const response = await memoryProductsDao.paginate(category,page,limit,sort);
+        const response = await productsRepository.paginate(category,page,limit,sort);
         const response2 = (req.session.user);
         res.render('home', {response, response2, stylesheet: 'viewProducts'});
     } catch (err) {
