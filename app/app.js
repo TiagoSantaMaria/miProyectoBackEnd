@@ -24,6 +24,7 @@ const { cartsRouter } = require("./routers/carts.routes");
 const { productsRouter } = require("./routers/products.routes");
 const { profileRouter } = require("./routers/profile.routes");
 const { currentRouter } = require("./routers/current.routes");
+const { ticketsRouter } = require("./routers/tickets.routes");
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");

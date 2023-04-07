@@ -1,4 +1,4 @@
-class usersDTO{
+class UsersDTO{
     constructor(user){
         //DATON NO SENSIBLES
         this._id=user._id;
@@ -8,5 +8,5 @@ class usersDTO{
     }
 }
 module.exports = {
-    usersDTO
+    UsersDTO
 }

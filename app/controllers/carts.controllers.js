@@ -2,6 +2,7 @@
 const { UserRepository } = require("../repository/users.repository");
 const { CartsRepository } = require("../repository/carts.repository");
 const { ProductsRepository } = require("../repository/products.repository");
+const { TicketRepository } = require("../repository/tickets.repository");
 
 //IMPORTO DAO NECESARIOS
 
@@ -16,6 +17,10 @@ const userRepository = new UserRepository(memoryUsersDao);
 const { productsDao } = require("../dao/mongo/classes/products.dao");
 const memoryProductsDao = new productsDao;
 const productsRepository = new ProductsRepository(memoryProductsDao);
+
+const { ticketDao } = require("../dao/mongo/classes/tickets.dao");
+const memoryTicketDao = new ticketDao;
+const ticketRepository = new TicketRepository(memoryTicketDao)
 
 
 const createCart = async(req,res)=>{
@@ -71,6 +76,17 @@ const showCarts = async(req,res)=>{
     try{
         const carts = await cartRepository.getAll();
         res.status(200).send(carts);
+    }catch(err){
+        res.status(500).send(err.message);
+    }
+}
+const finishPurchase = async(req,res)=>{
+    try{
+        const user = await userRepository.getOneById(req.session.user.email);
+        const totalPurchase = req.body;
+        console.log(totalPurchase.totalPrice)
+        const ticket = await ticketRepository.create(user.email,totalPurchase.totalPrice);
+        res.status(201).send({ message: "succesfull", ticket });
     }catch(err){
         res.status(500).send(err.message);
     }
@@ -136,6 +152,7 @@ module.exports = {
     saveProductsInCart,
     updateQuantity,
     deleteProductInCart,
-    showProductsInCart
+    showProductsInCart,
+    finishPurchase
 };
 

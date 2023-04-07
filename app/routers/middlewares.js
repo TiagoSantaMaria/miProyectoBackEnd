@@ -13,14 +13,20 @@ function authProfile(req, res, next) {
     return res.status(401).send('Usted debe estar Logeado')
 }
 
-// PARA AUTENTIFICAR QUE SEA EL ADMIN
+// PARA AUTENTIFICAR QUE SEA ROL ADMIN
 function authAdmin(req, res, next) {
-    if (req.session?.email === 'tiago@gmail.com' && req.session?.admin) {
+    if (req.session.user?.email === 'tiago@gmail.com' && req.session.user?.admin) {
         return next()
     }
     return res.status(401).send('error de autorización!')
 }
-
+// PARA AUTENTIFICAR QUE SEA ROL USER 
+function authUser(req, res, next) {
+    if (req.session.user.role) {
+        return next()
+    }
+    return res.status(401).send('error de autorización!')
+}
 module.exports = {
     auth,
     authProfile

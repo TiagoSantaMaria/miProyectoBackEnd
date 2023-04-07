@@ -1,5 +1,13 @@
 console.log("Se conecto el js");
 
+const calculateTotalPrice = (listProduct)=>{
+    let totalPrice=0;
+    listProduct.map((product)=>{
+        totalPrice+=product.quantity*product.price;
+    })
+    return totalPrice;
+}
+
 let carts = {};
 let myCart = [];
 
@@ -9,6 +17,7 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
     if(myCart.length===0){
             //AGREGO EL PRODUCTO AL CARRITO
             myProducts.idProduct = id;
+            myProducts.price = precio;
             myProducts.quantity = 0;
             myCart.push(myProducts);
         }
@@ -21,6 +30,7 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
         })
         if(find===false){
             myProducts.idProduct = id;
+            myProducts.price = precio;
             myProducts.quantity = 1;
             myCart.push(myProducts);
         }
@@ -61,9 +71,21 @@ const confirmarCompra = async() =>{
     },
     body:JSON.stringify({myCart})
     })
+    idCart = carts[carts.length-1]._id;
+
+    //CALCULO PRECIO DE LA ORDEN
+    const totalPrice = calculateTotalPrice(myCart);
+
+    //CREO EL TICKET
+    await fetch(`http://localhost:8080/api/carts/${idCart}/purchase`,{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({totalPrice})
+    })
 
     //ASIGNO CARRITO AL USUARIO // CUANDO CREO EL CARRO SE LE ASIGNA EL ID DEL USER
-    idCart = carts[carts.length-1]._id;
     await fetch(`http://localhost:8080/api/profile`, {
         method: "POST",
     headers: {
