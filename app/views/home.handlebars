@@ -5,7 +5,7 @@
             <li>Nombre Producto: {{this.title}}</li>
             <li>Precio: {{this.price}}</li>
             <li>Stock: {{this.stock}}</li>
-            <button method="POST PUT" onclick="agregarAlCarrito('{{this._id}}','{{this.title}}','{{this.price}}')">AGREGAR PRODUCTO AL CARRITO</button>
+            <button method="POST PUT" onclick="agregarAlCarrito('{{this._id}}','{{this.title}}','{{this.price}}','{{this.stock}}')">AGREGAR PRODUCTO AL CARRITO</button>
         </hr>
     {{/each}}
     <div>

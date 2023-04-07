@@ -56,8 +56,8 @@ const modifyProduct = async(req,res)=>{
     if(!!pid){
         const updateProduct = req.body;
         //El signo + sobre id es para transformarlo en number
-        if(await productsRepository.updateProduct(pid, updateProduct)){
-            res.status(200).send("Producto Actualizado!");
+        if(await productsRepository.updateProduct(pid, updateProduct.productModify)){
+            res.status(200).send({ message: "successChange" });
         }else{
             res.status(400).send("El Producto No Pudo Ser Actualizado!");
         }

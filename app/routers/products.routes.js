@@ -14,7 +14,7 @@ productsRouter.get("/:pid",showProductById);
 //  Endpoint para agregar un producto nuevo 
 productsRouter.post("/", addNewProduct)
 
-// Endpoint para agregar un producto nuevo
+// Endpoint para modificar un producto
 productsRouter.put("/:pid", modifyProduct)
 
 //Endpoint para eliminar un producto

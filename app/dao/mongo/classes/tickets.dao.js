@@ -1,10 +1,11 @@
 const { ticketModel } = require("../models/tickets.model");
 
 class ticketDao{
+
     async create(email,totalPurchase){
         try{
             const ticket = new ticketModel()
-            ticket.code="5";
+            ticket.code = this.createAlternativeCode().toString();
             let today = new Date();
             ticket.purchase_datetime=today.toLocaleString('en-US');
             ticket.amount=totalPurchase;
@@ -14,6 +15,11 @@ class ticketDao{
         }catch(err){
 
         }
+    }
+
+    createAlternativeCode(){
+        var num = Math.floor((Math.random() * 9999) + 1); 
+        return num;
     }
 }
 

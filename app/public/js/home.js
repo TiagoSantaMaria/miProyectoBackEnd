@@ -1,23 +1,59 @@
 console.log("Se conecto el js");
-
+//CALCULA EL PRECIO DE LA COMPRA DE PRODUCTOS CON STOCK Y LO RETORNA
 const calculateTotalPrice = (listProduct)=>{
     let totalPrice=0;
     listProduct.map((product)=>{
-        totalPrice+=product.quantity*product.price;
+        if(product.quantity<=product.stock){
+            totalPrice+=product.quantity*product.price;
+        }
     })
     return totalPrice;
+}
+//CONTROLA STOCKY DEVUELVE AQUELLOS PRODUCTOS LOS CUALES LA DEMANDA SUPERA EL STOCK
+const controlStock = (listProduct)=>{
+    let productsOut = []
+    let productsIn = []
+    listProduct.map((product)=>{
+        if(product.quantity>product.stock){
+            productsOut.push(product);
+        }else{
+            productsIn.push(product);
+        }
+    })
+    productsIn.forEach(async(product)=>{
+        let productModify={};
+        productModify.stock=product.stock-product.quantity;
+        console.log(productModify);
+        await fetch(`http://localhost:8080/api/products/${product.idProduct}`, {
+            method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({productModify})
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+            if(data.message ==="successChange"){
+                alert(`${product.name} TIENE STOCK SUFICIENTE`);
+            }
+        })
+        .catch((err)=>console.log(err))
+    })
+    return productsOut;
 }
 
 let carts = {};
 let myCart = [];
 
-const agregarAlCarrito = async (id,nombre,precio) =>{
+const agregarAlCarrito = async (id,name,precio,stock) =>{
     let myProducts={};
     let find=false;
     if(myCart.length===0){
             //AGREGO EL PRODUCTO AL CARRITO
             myProducts.idProduct = id;
+            myProducts.name = name;
             myProducts.price = precio;
+            myProducts.stock = stock;
             myProducts.quantity = 0;
             myCart.push(myProducts);
         }
@@ -30,7 +66,9 @@ const agregarAlCarrito = async (id,nombre,precio) =>{
         })
         if(find===false){
             myProducts.idProduct = id;
+            myProducts.name = name;
             myProducts.price = precio;
+            myProducts.stock = stock;
             myProducts.quantity = 1;
             myCart.push(myProducts);
         }
@@ -71,8 +109,17 @@ const confirmarCompra = async() =>{
     },
     body:JSON.stringify({myCart})
     })
+
     idCart = carts[carts.length-1]._id;
 
+    //CONTROLO STOCK
+    productosSinStock = controlStock(myCart);
+    if (productosSinStock.length!==0){
+        productosSinStock.forEach((product)=>{
+            alert(`${product.name} NO TIENE STOCK SUFICIENTE, POR LO QUE NO SE AGREGO AL PROCESO DE COMPRA`);
+        })
+    }
+    
     //CALCULO PRECIO DE LA ORDEN
     const totalPrice = calculateTotalPrice(myCart);
 
@@ -98,12 +145,14 @@ const confirmarCompra = async() =>{
         if(data.message ==="success"){
             alert("Compra Registrada");
             carts = {};
-            myCart = [];
         }else{
             alert("Algo ha pasado")
         }
     })
     .catch((err)=>console.log(err))
+
+    myCart = productosSinStock;
+    console.log(myCart);
 }
 
 
