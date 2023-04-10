@@ -18,7 +18,7 @@ productsRouter.get("/:pid",showProductById);
 productsRouter.post("/", authAdmin, addNewProduct);
 
 // Endpoint para modificar un producto
-productsRouter.put("/:pid",authAdmin, modifyProduct)
+productsRouter.put("/:pid", modifyProduct)
 
 //Endpoint para eliminar un producto
 productsRouter.delete("/:pid",authAdmin, deleteProduct)

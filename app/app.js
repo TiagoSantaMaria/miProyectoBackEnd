@@ -24,6 +24,7 @@ const { cartsRouter } = require("./routers/carts.routes");
 const { productsRouter } = require("./routers/products.routes");
 const { profileRouter } = require("./routers/profile.routes");
 const { currentRouter } = require("./routers/current.routes");
+const { mailsRouter } = require("./routers/mails.routes");
 const { ticketsRouter } = require("./routers/tickets.routes");
 
 //IMPORTO DOTENV Y SUS VARIABLES
@@ -107,6 +108,8 @@ app.use("/api/carts", cartsRouter);
 app.use('/api/profile', profileRouter);
 //LLAMO AL CURRENT ROUTER
 app.use('/api/current', currentRouter);
+//LLAMO AL MAIL ROUTER
+app.use('/api/mail', mailsRouter);
 
 //LEVANTO SERVER SOCKET
 socketServer.on('connection', (socket) =>{

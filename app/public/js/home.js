@@ -151,6 +151,12 @@ const confirmarCompra = async() =>{
     })
     .catch((err)=>console.log(err))
 
+    await fetch(`http://localhost:8080/api/mail`, {
+        method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    }})
+
     myCart = productosSinStock;
     console.log(myCart);
 }
