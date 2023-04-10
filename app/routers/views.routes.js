@@ -17,10 +17,11 @@ const memoryProductsDao = new productsDao;
 const productsRepository = new ProductsRepository(memoryProductsDao);
 
 // IMPORTO AUTHORIZACIONES
-const {auth, authProfile} = require("./middlewares");
+const {auth, authProfile, authUser} = require("./middlewares");
+
 
 //ENDPOINTS
-viewsRouter.get('/products',authProfile,async(req,res)=>{
+viewsRouter.get('/products',authUser,async(req,res)=>{
     try {
         const {category = null} = req.query;
         const {page = 1} = req.query;

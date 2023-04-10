@@ -5,14 +5,20 @@ const cartsRouter = express.Router();
 
 const { showCarts, createCart,addProductToCart, saveProductsInCart, updateQuantity,deleteProductInCart,showProductsInCart,finishPurchase } = require("../controllers/carts.controllers");
 
-cartsRouter.post("/", createCart);
-cartsRouter.get("/", showCarts);
-cartsRouter.put("/:cid", saveProductsInCart);
-cartsRouter.post("/:cid/purchase",finishPurchase);
-cartsRouter.post("/:cid/product/:pid", addProductToCart);
-cartsRouter.put("/:cid/product/:pid", updateQuantity);
-cartsRouter.delete("/:cid/product/:pid", deleteProductInCart);
-cartsRouter.get("/:cid", showProductsInCart)
+//IMPORTO AUTORIZACIONES
+const { authUser } = require("./middlewares");
+
+
+
+
+cartsRouter.post("/",authUser, createCart);
+cartsRouter.get("/", authUser, showCarts);
+cartsRouter.put("/:cid", authUser, saveProductsInCart);
+cartsRouter.post("/:cid/purchase",authUser, finishPurchase);
+cartsRouter.post("/:cid/product/:pid", authUser, addProductToCart);
+cartsRouter.put("/:cid/product/:pid", authUser, updateQuantity);
+cartsRouter.delete("/:cid/product/:pid", authUser, deleteProductInCart);
+cartsRouter.get("/:cid", authUser, showProductsInCart)
 
 module.exports={
     cartsRouter
