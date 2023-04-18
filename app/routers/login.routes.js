@@ -6,7 +6,9 @@ const passport = require("passport");
 const loginRouter = express.Router();
 
 //LOGIN CON DATOS
-loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
+//loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
+loginRouter.post("/", passport.authenticate('login'), async(req,res)=>{
+    console.log("ENTRO POR ACA");
     if (!req.user){
         return res.status(400).json({ message: "unsuccess" });
     }else{
@@ -20,6 +22,7 @@ loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin
         res.status(200).json({ message: "success" });
     }
 })
+
 loginRouter.get("/faillogin",async(req,res)=>{
     res.send({error:"Fail Login"})
 })

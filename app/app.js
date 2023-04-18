@@ -17,7 +17,6 @@ const { loginRouter } = require("./routers/login.routes");
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/views.routes');
 
-// IMPORTAR MODULO CURRENT ROUTER
 
 // IMPORTO EL ROUTER NUEVO PATRON MVC
 const { cartsRouter } = require("./routers/carts.routes");
@@ -68,6 +67,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next)=>{
     req.socket = socketServer;
     next();
+});
+
+//PARA MANEJO DE ERRORES
+app.use((error,req,res,next)=>{
+    console.log(error.cause);
+    switch(error.code){
+        case EErrors.INVALID_TYPES_ERROR:
+            res.send({status:"Error",error:error.name})
+            break;
+        default:
+            res.send({status:"Error",error:"Unhandled error"})
+    }
 });
 
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES

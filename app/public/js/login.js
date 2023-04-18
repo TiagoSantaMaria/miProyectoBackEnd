@@ -1,8 +1,8 @@
 const addLoggin = document.getElementById("login");
 addLoggin.addEventListener("click",async (e)=>{
     console.log("Boton apretado");
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value || undefined;
+    const password = document.getElementById("password").value || undefined;
     await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: {
@@ -13,5 +13,5 @@ addLoggin.addEventListener("click",async (e)=>{
         .then((res)=>res.json())
         .then((data)=>
             data.message ==="success"?(window.location.href="/products"):alert("Algo ha pasado"))
-        .catch((err)=>console.log(err))
+        .catch((error)=>console.log(error))
 })

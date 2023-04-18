@@ -2,7 +2,15 @@ const passport = require("passport");
 const local = require("passport-local");
 const { userModel } = require("../dao/mongo/models/users.model");
 const { createHash, isValidPassword } = require("../utils");
-const GitHubStrategy = require("passport-github2")
+const GitHubStrategy = require("passport-github2");
+
+//MANEJO DE ERRORES
+const { CustomError } = require("../services/errors/CustomError");
+const { generateUserErrorInfo } = require("../services/errors/info");
+const { EErrors } = require("../services/errors/enums");
+
+
+
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () =>{
@@ -35,8 +43,23 @@ const initializePassport = () =>{
                 return done("ERROR AL OBTENER EL USUARIO: "+error)
             }
         }))
+
     passport.use("login", new LocalStrategy({usernameField:'email'},async(username,password,done)=>{
         try{
+
+            console.log(username);
+            console.log(password);
+
+            if(!username || !password){
+                console.log("enra al middle")
+                CustomError.createError({
+                    name:"User Loggin Error",
+                    cause:generateUserErrorInfo({username,password}),
+                    message:"Error Tryning to logging User",
+                    code: EErrors.INVALID_TYPES_ERROR
+                })
+            }
+
             const user = await userModel.findOne({email:username})
             if(!user){
                 return done(null, false);
@@ -46,10 +69,11 @@ const initializePassport = () =>{
             }else{
                 return done(null,user);
             }
-        }catch(err){
-            return done(err);
+        }catch(error){
+            return done(error);
         }
     }))
+
     passport.use('github', new GitHubStrategy({
         clientID:'Iv1.2911d2a81d622cd1',
         clientSecret:'00eac46094e36c6e711c4e542d88ff10eab837e7',
