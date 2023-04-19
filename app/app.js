@@ -73,6 +73,9 @@ app.use((req, res, next)=>{
 const { errorHandler } = require("./middlewares/errors");
 app.use(errorHandler);
 
+
+
+
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
 app.use(session({

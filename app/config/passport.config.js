@@ -38,10 +38,8 @@ const initializePassport = () =>{
                         message:"Email already REGISTERED",
                         code: EErrors.INVALID_TYPES_ERROR
                     })
-
                     // return done (null, false)
                 }
-                
                 const newUser = {
                     first_name,
                     last_name,
@@ -73,16 +71,17 @@ const initializePassport = () =>{
             if(!user){
                 CustomError.createError({
                     name:"User Loggin Error",
-                    cause:generateUserErrorInfo(username,password),
+                    cause:generateUserErrorInfoLogin(username,password),
                     message:"Email NOT FOUND",
                     code: EErrors.INVALID_TYPES_ERROR
                 })
+                //return done(null, false);
             }
             //VALIDAR QUE LA CONTRASEÑA SEA LA CORRECTA
             if(!isValidPassword(password,user.password)){
                 CustomError.createError({
                     name:"User Loggin Error",
-                    cause:generateUserErrorInfo(username,password),
+                    cause:generateUserErrorInfoLogin(username,password),
                     message:"Password INCORRECT",
                     code: EErrors.INVALID_TYPES_ERROR
                 })
