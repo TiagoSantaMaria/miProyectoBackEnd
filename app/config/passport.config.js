@@ -47,14 +47,10 @@ const initializePassport = () =>{
     passport.use("login", new LocalStrategy({usernameField:'email'},async(username,password,done)=>{
         try{
 
-            console.log(username);
-            console.log(password);
-
-            if(!username || !password){
-                console.log("enra al middle")
+            if(username==="undefined" || password==="undefined"){
                 CustomError.createError({
                     name:"User Loggin Error",
-                    cause:generateUserErrorInfo({username,password}),
+                    cause:generateUserErrorInfo(username,password),
                     message:"Error Tryning to logging User",
                     code: EErrors.INVALID_TYPES_ERROR
                 })

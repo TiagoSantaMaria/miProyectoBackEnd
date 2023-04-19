@@ -8,7 +8,6 @@ const loginRouter = express.Router();
 //LOGIN CON DATOS
 //loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
 loginRouter.post("/", passport.authenticate('login'), async(req,res)=>{
-    console.log("ENTRO POR ACA");
     if (!req.user){
         return res.status(400).json({ message: "unsuccess" });
     }else{

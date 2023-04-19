@@ -70,16 +70,8 @@ app.use((req, res, next)=>{
 });
 
 //PARA MANEJO DE ERRORES
-app.use((error,req,res,next)=>{
-    console.log(error.cause);
-    switch(error.code){
-        case EErrors.INVALID_TYPES_ERROR:
-            res.send({status:"Error",error:error.name})
-            break;
-        default:
-            res.send({status:"Error",error:"Unhandled error"})
-    }
-});
+const { errorHandler } = require("./middlewares/errors");
+app.use(errorHandler);
 
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
