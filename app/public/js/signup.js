@@ -3,11 +3,11 @@ console.log("Conectado")
 const addLoggin = document.getElementById("signup");
 addLoggin.addEventListener("click",async (e)=>{
     console.log("Boton apretado");
-    const first_name = document.getElementById("first_name").value;
-    const last_name = document.getElementById("last_name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const age = document.getElementById("age").value;
+    const first_name = document.getElementById("first_name").value || "undefined";
+    const last_name = document.getElementById("last_name").value || "undefined";
+    const email = document.getElementById("email").value || "undefined";
+    const password = document.getElementById("password").value || "undefined";
+    const age = document.getElementById("age").value || "undefined";
 
     await fetch("http://localhost:8080/api/signup", {
         method: "POST",

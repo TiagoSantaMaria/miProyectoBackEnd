@@ -6,7 +6,7 @@ const GitHubStrategy = require("passport-github2");
 
 //MANEJO DE ERRORES
 const { CustomError } = require("../services/errors/CustomError");
-const { generateUserErrorInfo } = require("../services/errors/info");
+const { generateUserErrorInfoLogin,generateUserErrorInfoSignUP,generateUserErrorEmailInUsed } = require("../services/errors/info");
 const { EErrors } = require("../services/errors/enums");
 
 
@@ -18,17 +18,30 @@ const initializePassport = () =>{
         {passReqToCallback:true, usernameField:'email'}, async (req,username,password,done) =>{
             const {first_name,last_name,email,age} = req.body;
             try{
-                if(!first_name || !last_name || !email || !password || !age){
-                    // FALTAN INGRESAR DATOS
-                    return done (null, false)
-                    // return done("FALTAN INGRESAR DATOS");
+                // FALTAN INGRESAR DATOS
+                if(first_name === "undefined" || last_name === "undefined" || email === "undefined"|| password === "undefined" || age === "undefined"){
+                    CustomError.createError({
+                        name:"User SignUP Error",
+                        cause:generateUserErrorInfoSignUP(first_name,last_name,email,age,password),
+                        message:"Missing data entry",
+                        code: EErrors.INVALID_TYPES_ERROR
+                    })
+                    //return done (null, false)
                 }
+
                 let user = await userModel.findOne({email:username});
+                // EMAIL YA REGISTRADO
                 if(user){
-                    // EMAIL YA REGISTRADO
-                    return done (null, false)
-                    // return done("EMAIL YA REGISTRADO");
+                    CustomError.createError({
+                        name:"User SignUP Error",
+                        cause:generateUserErrorEmailInUsed(email),
+                        message:"Email already REGISTERED",
+                        code: EErrors.INVALID_TYPES_ERROR
+                    })
+
+                    // return done (null, false)
                 }
+                
                 const newUser = {
                     first_name,
                     last_name,
@@ -40,28 +53,39 @@ const initializePassport = () =>{
                 let result = await userModel.create(newUser);
                 return done(null,result);
             }catch(error){
-                return done("ERROR AL OBTENER EL USUARIO: "+error)
+                return done(error);
             }
         }))
 
     passport.use("login", new LocalStrategy({usernameField:'email'},async(username,password,done)=>{
         try{
-
+            //VALIDAR QUE NO FALTAN INGRESAR DATOS
             if(username==="undefined" || password==="undefined"){
                 CustomError.createError({
                     name:"User Loggin Error",
-                    cause:generateUserErrorInfo(username,password),
-                    message:"Error Tryning to logging User",
+                    cause:generateUserErrorInfoLogin(username,password),
+                    message:"Missing data entry:",
                     code: EErrors.INVALID_TYPES_ERROR
                 })
             }
-
+            //VALIDAR QUE EL MAIL EXISTA
             const user = await userModel.findOne({email:username})
             if(!user){
-                return done(null, false);
+                CustomError.createError({
+                    name:"User Loggin Error",
+                    cause:generateUserErrorInfo(username,password),
+                    message:"Email NOT FOUND",
+                    code: EErrors.INVALID_TYPES_ERROR
+                })
             }
+            //VALIDAR QUE LA CONTRASEÑA SEA LA CORRECTA
             if(!isValidPassword(password,user.password)){
-                return done(null, false)
+                CustomError.createError({
+                    name:"User Loggin Error",
+                    cause:generateUserErrorInfo(username,password),
+                    message:"Password INCORRECT",
+                    code: EErrors.INVALID_TYPES_ERROR
+                })
             }else{
                 return done(null,user);
             }
