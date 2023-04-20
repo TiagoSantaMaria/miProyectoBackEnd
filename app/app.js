@@ -25,6 +25,7 @@ const { profileRouter } = require("./routers/profile.routes");
 const { currentRouter } = require("./routers/current.routes");
 const { mailsRouter } = require("./routers/mails.routes");
 const { ticketsRouter } = require("./routers/tickets.routes");
+const { mockingRouter } = require("./routers/mocking.routes");
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
@@ -116,6 +117,8 @@ app.use('/api/profile', profileRouter);
 app.use('/api/current', currentRouter);
 //LLAMO AL MAIL ROUTER
 app.use('/api/mail', mailsRouter);
+app.use('/api/mocking', mockingRouter);
+
 
 //LEVANTO SERVER SOCKET
 socketServer.on('connection', (socket) =>{
