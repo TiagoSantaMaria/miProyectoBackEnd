@@ -10,13 +10,15 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const { initializePassport } = require("./config/passport.config");
 
+//IMPORTO LOGGER
+const { addLogger } = require("./utils/loggers");
+
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signup.routes");
 // IMPORTAR MODULO LOGIN ROUTER
 const { loginRouter } = require("./routers/login.routes");
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/views.routes');
-
 
 // IMPORTO EL ROUTER NUEVO PATRON MVC
 const { cartsRouter } = require("./routers/carts.routes");
@@ -26,6 +28,7 @@ const { currentRouter } = require("./routers/current.routes");
 const { mailsRouter } = require("./routers/mails.routes");
 const { ticketsRouter } = require("./routers/tickets.routes");
 const { mockingRouter } = require("./routers/mocking.routes");
+const { loggerRouter } = require("./routers/logger.routes");
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");
@@ -64,6 +67,9 @@ app.use(express.urlencoded({ extended: true }));
 
 //MIDDLEWARES
 
+//PARA AGG LOGGER
+app.use(addLogger)
+
 // PARA AGREGAR SOCKET A REQ
 app.use((req, res, next)=>{
     req.socket = socketServer;
@@ -74,15 +80,12 @@ app.use((req, res, next)=>{
 const { errorHandler } = require("./middlewares/errors");
 app.use(errorHandler);
 
-
-
-
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
 app.use(cookieParser("CookieProtegida"));
 app.use(session({
     store: MongoStore.create({
-            mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-            mongoOptions: {
+        mongoUrl: `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.gvuqwfs.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+        mongoOptions: {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             },
@@ -118,6 +121,8 @@ app.use('/api/current', currentRouter);
 //LLAMO AL MAIL ROUTER
 app.use('/api/mail', mailsRouter);
 app.use('/api/mocking', mockingRouter);
+app.use('/api/logger', loggerRouter);
+
 
 
 //LEVANTO SERVER SOCKET

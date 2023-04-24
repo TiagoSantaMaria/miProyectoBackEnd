@@ -1,5 +1,5 @@
 const express = require("express");
-const { generateProduct } = require("../utils");
+const { generateProduct } = require("../utils/utils");
 
 // const { ProductsRepository } = require("../repository/products.repository");
 // const productsRepository = new ProductsRepository(memoryProductsDao);
