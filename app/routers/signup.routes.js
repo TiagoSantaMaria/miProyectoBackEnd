@@ -6,6 +6,7 @@ const passport = require("passport");
 const singupRouter = express.Router();
 
 singupRouter.post("/",passport.authenticate("register",{failureRedirect:"/failregister"}),async (req,res)=>{
+    req.logger.info("NUEVO SIGNUP");
     res.status(201).json({ message: "success" });
 })
 

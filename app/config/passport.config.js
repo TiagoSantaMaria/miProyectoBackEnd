@@ -8,6 +8,7 @@ const GitHubStrategy = require("passport-github2");
 const { CustomError } = require("../services/errors/CustomError");
 const { generateUserErrorInfoLogin,generateUserErrorInfoSignUP,generateUserErrorEmailInUsed } = require("../services/errors/info");
 const { EErrors } = require("../services/errors/enums");
+const { Console } = require("winston/lib/winston/transports");
 
 
 
@@ -65,6 +66,7 @@ const initializePassport = () =>{
                     message:"Missing data entry:",
                     code: EErrors.INVALID_TYPES_ERROR
                 })
+                req.logger.info("INTENTO DE LOGGIN SIN INGRESO DE DATOS");
             }
             //VALIDAR QUE EL MAIL EXISTA
             const user = await userModel.findOne({email:username})
@@ -75,6 +77,7 @@ const initializePassport = () =>{
                     message:"Email NOT FOUND",
                     code: EErrors.INVALID_TYPES_ERROR
                 })
+                req.logger.info("INTENTO DE LOGGIN CON EMAIL NO EXISTENTE");
                 //return done(null, false);
             }
             //VALIDAR QUE LA CONTRASEÑA SEA LA CORRECTA

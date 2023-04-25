@@ -22,7 +22,6 @@ const { ticketDao } = require("../dao/mongo/classes/tickets.dao");
 const memoryTicketDao = new ticketDao;
 const ticketRepository = new TicketRepository(memoryTicketDao)
 
-
 const createCart = async(req,res)=>{
     try{
         const user = await userRepository.getOneById(req.session.user.email);
@@ -86,6 +85,7 @@ const finishPurchase = async(req,res)=>{
         const totalPurchase = req.body;
         console.log(totalPurchase.totalPrice)
         const ticket = await ticketRepository.create(user.email,totalPurchase.totalPrice);
+        req.logger.info("NUEVA COMPRA");
         res.status(201).send({ message: "succesfull", ticket });
     }catch(err){
         res.status(500).send(err.message);

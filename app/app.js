@@ -13,6 +13,9 @@ const { initializePassport } = require("./config/passport.config");
 //IMPORTO LOGGER
 const { addLogger } = require("./utils/loggers");
 
+//PARA MANEJO DE ERRORES
+const errorHandler  = require("./middlewares/errors/index");
+
 // IMPORTAR MODULO SIGN UP ROUTER
 const { singupRouter } = require("./routers/signup.routes");
 // IMPORTAR MODULO LOGIN ROUTER
@@ -77,7 +80,6 @@ app.use((req, res, next)=>{
 });
 
 //PARA MANEJO DE ERRORES
-const { errorHandler } = require("./middlewares/errors");
 app.use(errorHandler);
 
 // PARA GUARDAR LA SESSION EN MONGO Y USAR COOKIES
@@ -121,7 +123,7 @@ app.use('/api/current', currentRouter);
 //LLAMO AL MAIL ROUTER
 app.use('/api/mail', mailsRouter);
 app.use('/api/mocking', mockingRouter);
-app.use('/api/logger', loggerRouter);
+app.use('/loggerTest', loggerRouter);
 
 
 

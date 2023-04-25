@@ -2,3 +2,5 @@
 {"level":"fatal","message":"Prueba de fatal","timestamp":"2023-04-24T20:47:03.407Z"}
 {"level":"fatal","message":"Prueba de fatal","timestamp":"2023-04-24T20:47:29.320Z"}
 {"level":"error","message":"Prueba de error","timestamp":"2023-04-24T20:48:24.580Z"}
+{"level":"error","message":"Faltan datos del producto!","timestamp":"2023-04-25T13:46:01.822Z"}
+{"level":"error","message":"Faltan datos del producto!","timestamp":"2023-04-25T13:47:18.916Z"}

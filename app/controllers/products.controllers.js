@@ -36,6 +36,7 @@ const addNewProduct = async(req,res)=>{
     const {title, info, code, price, thumbnail, stock, category,  status} = req.body;
     try {
         if (!title || !info || !code || !price || !thumbnail || !stock || !category || !status){
+            req.logger.error("Faltan datos del producto!");
             res.status(400).send({ error: "Faltan datos" });
             return
         }
@@ -43,8 +44,10 @@ const addNewProduct = async(req,res)=>{
         const newProduct = await productsRepository.create(product, code);
         if(!!newProduct){
             productsRepository.save(newProduct);
+            req.logger.info("Producto creado!");
             res.status(200).send({ message: "Producto creado", product});
         }else{
+            req.logger.error("El Codigo del producto esta en uso vigente!");
             res.status(400).send({ error: "El Codigo del producto esta en uso vigente!" });
         }
     } catch (err) {
@@ -57,8 +60,10 @@ const modifyProduct = async(req,res)=>{
         const updateProduct = req.body;
         //El signo + sobre id es para transformarlo en number
         if(await productsRepository.updateProduct(pid, updateProduct.productModify)){
+            req.logger.info("successChange!");
             res.status(200).send({ message: "successChange" });
         }else{
+            req.logger.error("El Producto No Pudo Ser Actualizado!");
             res.status(400).send("El Producto No Pudo Ser Actualizado!");
         }
     }
@@ -67,6 +72,7 @@ const deleteProduct = async(req,res)=>{
     const { pid } = req.params;
     try {
         const result = await productsRepository.delete(pid);
+        req.logger.info("Producto eliminado!");
         res.status(200).send({ message: "Producto eliminado", result });
     } catch (err) {
         res.status(500).send(err.message);

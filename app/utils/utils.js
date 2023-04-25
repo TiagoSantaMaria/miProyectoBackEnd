@@ -13,8 +13,8 @@ const createHash = (password) =>
 const isValidPassword = (passwordBody, passwordBD) =>
     bcrypt.compareSync(passwordBody, passwordBD);
 
+    
 //USO DE FAKER CREAR DATOS RANDOMS
-
 const generateProduct = () =>{
     let randomProduct={
         title : faker.commerce.productName(),

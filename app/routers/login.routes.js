@@ -6,8 +6,8 @@ const passport = require("passport");
 const loginRouter = express.Router();
 
 //LOGIN CON DATOS
-//loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
-loginRouter.post("/", passport.authenticate('login'), async(req,res)=>{
+// loginRouter.post("/", passport.authenticate('login'), async(req,res)=>{
+loginRouter.post("/", passport.authenticate('login',{failureRedirect:'/faillogin'}), async(req,res)=>{
     if (!req.user){
         return res.status(400).json({ message: "unsuccess" });
     }else{
@@ -18,6 +18,7 @@ loginRouter.post("/", passport.authenticate('login'), async(req,res)=>{
             email: req.user.email,
             role:req.user.role
         }
+        req.logger.info("NUEVO LOGIN");
         res.status(200).json({ message: "success" });
     }
 })

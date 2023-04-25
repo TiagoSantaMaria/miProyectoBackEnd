@@ -5,8 +5,8 @@ const loggerRouter = express.Router();
 
 loggerRouter.get("/", (req, res) => {
     // req.logger.warning("Prueba de alerta");
-    req.logger.error("Prueba de error");
-    // req.logger.fatal("Prueba de info");
+    // req.logger.error("Prueba de error");
+    // req.logger.info("Prueba de info");
     // req.logger.debug("Prueba de debug");
     // req.logger.silly("Prueba de silly");
     // req.logger.http("Prueba de http");
