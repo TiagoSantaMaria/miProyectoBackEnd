@@ -23,6 +23,15 @@ class usersDao{
             throw err
         }
     }
+    //------------
+    async createUser(user){
+        try{
+            const newUser = await userModel.create(user);
+            return newUser;
+        }catch(err){
+            throw new err
+        }
+    }
 }
 
 

@@ -16,10 +16,6 @@ const { addLogger } = require("./utils/loggers");
 //PARA MANEJO DE ERRORES
 const errorHandler  = require("./middlewares/errors/index");
 
-// IMPORTAR MODULO SIGN UP ROUTER
-const { singupRouter } = require("./routers/signup.routes");
-// IMPORTAR MODULO LOGIN ROUTER
-const { loginRouter } = require("./routers/login.routes");
 // IMPORTAR MODULO VIEWS ROUTER
 const { viewsRouter } = require('./routers/views.routes');
 
@@ -32,6 +28,8 @@ const { mailsRouter } = require("./routers/mails.routes");
 const { ticketsRouter } = require("./routers/tickets.routes");
 const { mockingRouter } = require("./routers/mocking.routes");
 const { loggerRouter } = require("./routers/logger.routes");
+const { loginRouter } = require("./routers/login.routes");
+const { singupRouter } = require("./routers/signup.routes");
 
 //IMPORTO DOTENV Y SUS VARIABLES
 const dotenv = require("dotenv");

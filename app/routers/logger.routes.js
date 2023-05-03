@@ -10,7 +10,6 @@ loggerRouter.get("/", (req, res) => {
     // req.logger.debug("Prueba de debug");
     // req.logger.silly("Prueba de silly");
     // req.logger.http("Prueba de http");
-    // req.logger.verbose("Prueba de verbose");
     
     res.send({ message: "Prueba de logger!!" });
 });

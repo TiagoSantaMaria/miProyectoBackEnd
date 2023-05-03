@@ -50,6 +50,7 @@ if (ENVIRONMENT === "PRODUCTION") {
         ],
     });
     }else{
+        //USAR CUANDO SE ESTA PROGRAMANDO
         logger = winston.createLogger({
             levels:customLevelsOptions.levels,
             transports: [
